@@ -54,6 +54,10 @@ describe 'roman numbers test' do
     expect(2756.romano).to eq('MMDCCLVI')
   end
 
+  it 'no se pueden transformar numeros mayores a 3000' do
+    expect { 3001.romano }.to raise_error("numero invalido para convertir a romano" )
+  end
+
 
 
 

@@ -70,7 +70,7 @@ class ConversorDeNumerosInvalidos<ProveedorDeConversoresRomanos
     raise 'numero invalido para convertir a romano'
     end
   def self.puedoConvertirARomano(numero)
-    return numero<=0
+    return numero<=0 || numero>3000
   end
 end
 class Fixnum
