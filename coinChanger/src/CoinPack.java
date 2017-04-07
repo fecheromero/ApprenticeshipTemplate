@@ -9,7 +9,9 @@ public class CoinPack {
         coin=_coin;
         coinCant=_coinCant;
     }
-
+    public int coinCant(){
+        return coinCant;
+    };
     public boolean equals(CoinPack aCoin) {
         return coin.equals(aCoin.coin()) && coinCant==coinCant;
     }

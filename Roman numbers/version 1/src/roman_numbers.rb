@@ -1,36 +1,34 @@
 
 "I,II,III,IV,V,VI,VII,VIII,IX"
 class RomanConversor
-  '  def roman_conversor(primer_caracter_del_rango,caracter_medio_del_rango,caracter_final_del_rango,valor_modulo,numero)
-    representaciones=['',primer_caracter_del_rango,primer_caracter_del_rango*2,primer_caracter_del_rango*3,
-    primer_caracter_del_rango+caracter_medio_del_rango,caracter_medio_del_rango+primer_caracter_del_rango,
-    caracter_medio_del_rango+(primer_caracter_del_rango*2),caracter_medio_del_rango+(primer_caracter_del_rango*3),
-    primer_caracter_del_rango+caracter_final_del_rango]
-    representaciones[numero.modulo (valor_modulo).div(valor_modulo/10).truncate ]
-    conversor_centenas+conversor_decenas+conversor_unidades
-  end'
-  def conversor_unidades(a_number)
-representaciones=['','I','II','III','IV','V','VI','VII','VIII','IX']
-
-  representaciones[a_number.modulo 10]
+  @primer_caracter_del_rango
+  @caracter_medio_del_rango
+  @caracter_final_del_rango
+  @valor_modulo
+  @@conversores=[]
+  def initialize(primer_Caracter,caracter_medio,caracter_final,valor_mudulo)
+  @primer_caracter_del_rango=primer_Caracter
+    @caracter_medio_del_rango=caracter_medio
+    @caracter_final_del_rango=caracter_final
+    @valor_modulo=valor_mudulo
+    @@conversores.push(self)
   end
-
-  def conversor_decenas(a_number)
-    representaciones=['','X','XX','XXX','XL','L','LX ','LXX','LXXX','XC']
-
-    representaciones[a_number.modulo(100).div(10).truncate]
+  def valor_modulo()
+    return @valor_modulo
+    end
+  def roman_partial_conversion(numero)
+    representaciones=['',@primer_caracter_del_rango,@primer_caracter_del_rango*2,@primer_caracter_del_rango*3,
+    @primer_caracter_del_rango+@caracter_medio_del_rango,@caracter_medio_del_rango,@caracter_medio_del_rango+@primer_caracter_del_rango,
+    @caracter_medio_del_rango+(@primer_caracter_del_rango*2),@caracter_medio_del_rango+(@primer_caracter_del_rango*3),
+    @primer_caracter_del_rango+@caracter_final_del_rango]
+  return  representaciones[ numero.modulo(@valor_modulo).div(@valor_modulo/10).truncate ]
   end
-  def conversor_centenas(a_number)
-    representaciones=['','C','CC','CCC','CD','D','DC ','DCC','DCCC','CM']
-
-    representaciones[a_number.modulo(1000).div(100).truncate]
+  def self.conversor_a_romano(numero)
+  numeroEnRomano=@@conversores.sort{|convesor1| convesor1.valor_modulo()}.map{|conversor1| conversor1.roman_partial_conversion(numero)}.inject(''){|conversionParcial1,conversionParcial2|conversionParcial1+conversionParcial2}
+  return numeroEnRomano
   end
-  def conversor_millares(a_number)
-    representaciones=['','M','MM','MMM']
-
-    representaciones[a_number.modulo(10000).div(1000).truncate]
   end
-  def conversor_a_romano(a_number)
-    conversor_millares(a_number)+conversor_centenas(a_number)+conversor_decenas(a_number)+conversor_unidades(a_number)
-  end
-end
+RomanConversor.new('I','V','X',10)
+RomanConversor.new('X','L','C',100)
+RomanConversor.new('C','D','M',1000)
+RomanConversor.new('M','.','.',10000)

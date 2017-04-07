@@ -1,10 +1,10 @@
 require 'rspec'
 require_relative '../src/roman_numbers'
 describe 'roman numbers test' do
-  conversor=RomanConversor.new
+  conversor=RomanConversor
   it 'xxx' do
 
-    expect(conversor.conversor_unidades 5).to eq('V')
+    expect(conversor.conversor_a_romano 5).to eq('V')
   end
    it 'xxx2' do
 
