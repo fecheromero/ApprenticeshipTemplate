@@ -1,5 +1,4 @@
 
-"I,II,III,IV,V,VI,VII,VIII,IX"
 class RomanConversor
   @primer_caracter_del_rango
   @caracter_medio_del_rango
@@ -23,9 +22,13 @@ class RomanConversor
     @primer_caracter_del_rango+@caracter_final_del_rango]
   return  representaciones[ numero.modulo(@valor_modulo).div(@valor_modulo/10).truncate ]
   end
-  def self.conversor_a_romano(numero)
-  numeroEnRomano=@@conversores.sort{|convesor1| convesor1.valor_modulo()}.map{|conversor1| conversor1.roman_partial_conversion(numero)}.inject(''){|conversionParcial1,conversionParcial2|conversionParcial1+conversionParcial2}
+  def self.convertir_a_romano(numero)
+    if(numero>0 && numero<=3000)
+  numeroEnRomano=@@conversores.sort{|conversor1,conversor2| conversor2.valor_modulo()<=>conversor1.valor_modulo()}.map{|conversor1| conversor1.roman_partial_conversion(numero)}.inject(''){|conversionParcial1,conversionParcial2|conversionParcial1+conversionParcial2}
   return numeroEnRomano
+    else
+      raise 'numero invalido para convertir a romano'
+    end
   end
   end
 RomanConversor.new('I','V','X',10)

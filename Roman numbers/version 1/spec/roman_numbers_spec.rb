@@ -1,91 +1,48 @@
 require 'rspec'
 require_relative '../src/roman_numbers'
 describe 'roman numbers test' do
-  conversor=RomanConversor
-  it 'xxx' do
+  it 'numeros menores a 10 se convierten correctamente' do
 
-    expect(conversor.conversor_a_romano 5).to eq('V')
+    expect(RomanConversor.convertir_a_romano 5).to eq('V')
   end
-   it 'xxx2' do
+   it 'numeros menores a 50 se convierten correctamente' do
 
-      expect(conversor.conversor_unidades 14).to eq('IV')
+      expect(RomanConversor.convertir_a_romano 14).to eq('XIV')
    end
 
-  it 'xxx3' do
+  it 'numeros menores a 100 se convierten correctamente' do
 
-    expect(conversor.conversor_unidades 158).to eq('VIII')
+    expect(RomanConversor.convertir_a_romano 55).to eq('LV')
+  end
+  it 'numeros menores a 500 se convierten correctamente' do
+
+    expect(RomanConversor.convertir_a_romano 158).to eq('CLVIII')
   end
 
-  it 'xxx4' do
 
-    expect(conversor.conversor_unidades 0).to eq('')
+  it 'numeros menores a mil se convierten correctamente' do
+
+    expect(RomanConversor.convertir_a_romano 2534).to eq('MMDXXXIV')
   end
 
-  it 'xxx5' do
 
-    expect(conversor.conversor_unidades 55).to eq('V')
+  it 'numeros menores a 3000 se convierten correctamente' do
+
+    expect(RomanConversor.convertir_a_romano 2000 ).to eq('MM')
   end
 
-  it 'xxx6' do
+  it 'numeros negativos no se pueden convertir' do
 
-    expect(conversor.conversor_decenas 30).to eq('XXX')
+    expect{RomanConversor.convertir_a_romano -4}.to raise_error('numero invalido para convertir a romano')
   end
 
-  it 'xxx7' do
+  it 'numeros mayores a 3000 no se pueden convertir' do
 
-    expect(conversor.conversor_decenas 45).to eq('XL')
-  end
-  it 'xxx8' do
-
-    expect(conversor.conversor_decenas 170 ).to eq('LXX')
+    expect{RomanConversor.convertir_a_romano 3001}.to raise_error('numero invalido para convertir a romano')
   end
 
-  it 'xxx9' do
+  it 'el 0 no se puede convertir' do
 
-    expect(conversor.conversor_centenas 5 ).to eq('')
-  end
-
-  it 'xxx10' do
-
-    expect(conversor.conversor_centenas 20 ).to eq('')
-  end
-
-  it 'xxx11' do
-
-    expect(conversor.conversor_centenas 300 ).to eq('CCC')
-  end
-
-  it 'xxx12' do
-
-    expect(conversor.conversor_centenas 550 ).to eq('D')
-  end
-
-  it 'xxx13' do
-
-    expect(conversor.conversor_millares 5 ).to eq('')
-  end
-
-  it 'xxx14' do
-
-    expect(conversor.conversor_millares 50 ).to eq('')
-  end
-
-  it 'xxx15' do
-
-    expect(conversor.conversor_millares 550 ).to eq('')
-  end
-
-  it 'xxx16' do
-
-    expect(conversor.conversor_millares 2000 ).to eq('MM')
-  end
-
-  it 'xxx17' do
-
-    expect(conversor.conversor_millares 550 ).to eq('')
-  end
-  it 'xxx18' do
-
-    expect(conversor.conversor_a_romano 2534).to eq('MMDXXXIV')
+    expect{RomanConversor.convertir_a_romano 0}.to raise_error('numero invalido para convertir a romano')
   end
 end
