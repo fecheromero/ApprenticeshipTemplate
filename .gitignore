@@ -53,4 +53,4 @@ build-iPhoneSimulator/
 out
 *.iml
 resources
-target
+/target/
