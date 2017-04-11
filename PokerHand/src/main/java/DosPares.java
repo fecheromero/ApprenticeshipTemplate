@@ -1,27 +1,29 @@
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by fede on 10/04/17.
  */
-public class DosPares implements Comparador, EncontradorDeConjuntos {
-    private Integer iteraciones;
+public class DosPares extends Comparador implements EncontradorDeConjuntos {
+    private Boolean controlDePrimerPar;
     public DosPares(){
-            iteraciones=0;
+
+        controlDePrimerPar=true;
     }
     private DosPares reiterar(){
-        iteraciones=+1;
+        controlDePrimerPar=false;
         return this;
     }
     @Override
     public Mano manoGanadora(Mano mano1, Mano mano2) {
-        if (iteraciones == 0) {
+        if (controlDePrimerPar) {
           return   new ComparadorGenerico()
-                    .comparar(mano -> Arrays.stream(this.pares(mano))
+                    .comparar(mano -> Arrays.stream(this.pares(mano.cartas()))
                             .max((carta, carta1) -> carta1.valor() - carta.valor())
                             .get().valor(), mano1, mano2, reiterar());
         } else {
            return  new ComparadorGenerico()
-                    .comparar(mano -> Arrays.stream(this.pares(mano))
+                    .comparar(mano -> Arrays.stream(this.pares(mano.cartas()))
                             .min((carta, carta1) -> carta1.valor() - carta.valor())
                             .get().valor(), mano1, mano2, new ValorMayor());
 
@@ -29,12 +31,14 @@ public class DosPares implements Comparador, EncontradorDeConjuntos {
     }
 
     @Override
-    public Boolean puedoHacermeCargo(Mano mano) {
-        return this.pares(mano).length>=4;
+    public Boolean puedoHacermeCargo(List<Carta> cartas) {
+
+        return this.pares(cartas).length>=4;
     }
 
     @Override
     public Comparador siguiente() {
+
         return new Par();
     }
 

@@ -1,22 +1,26 @@
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by fede on 10/04/17.
  */
-public class Par implements Comparador, EncontradorDeConjuntos {
+public class Par extends Comparador implements EncontradorDeConjuntos {
 
     public Mano manoGanadora(Mano mano1, Mano mano2){
-          return    new ComparadorGenerico().comparar(mano -> Arrays.stream(this.pares(mano)).findFirst().get().valor(),
+          return    new ComparadorGenerico().comparar(mano -> Arrays.stream(this.pares(mano.cartas())).
+                          findFirst().get().valor(),
                 mano1,mano2,new ValorMayor());
     }
 
     @Override
-    public Boolean puedoHacermeCargo(Mano mano) {
-        return this.pares(mano).length>=2;
+    public Boolean puedoHacermeCargo(List<Carta> cartas) {
+
+        return this.pares(cartas).length>=2;
     }
 
     @Override
     public Comparador siguiente() {
+
         return new ValorMayor();
     }
 

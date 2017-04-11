@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 /**
  * Created by fede on 10/04/17.
  */
-public class ValorMayor implements Comparador {
+public class ValorMayor extends Comparador {
     private static Carta cartaEmpate=new Carta(0,'.');
     private static  Carta[] arrayEmpate={cartaEmpate};
     private static Mano manoEmpate=new Mano(arrayEmpate);
@@ -48,20 +48,26 @@ public class ValorMayor implements Comparador {
     }
 
     @Override
-    public Boolean puedoHacermeCargo(Mano mano) {
+    public Boolean puedoHacermeCargo(List<Carta> cartas) {
+
         return true;
     }
 
     @Override
     public Comparador siguiente() {
+
         return this;
     }
 
     @Override
     public String nombre() {
+
         return "High card";
     }
-
+    @Override
+    public String ganaConCarta(Jugador unJugador,Carta unaCarta) {
+        return unJugador.nombre()+ " Wins.-with " +this.nombre()+" : "+ unaCarta.denominacion()+".";
+    }
     @Override
     public Integer valorDeImportancia() {
         return 1;
