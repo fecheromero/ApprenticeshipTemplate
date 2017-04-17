@@ -1,15 +1,13 @@
-import jdk.nashorn.internal.codegen.MapCreator;
 
-import java.util.concurrent.Callable;
 import java.util.function.Function;
 
 /**
  * Created by fede on 10/04/17.
  */
 public class ComparadorGenerico {
-    public Mano comparar(Function<Mano,Integer> transformation, Mano mano1, Mano mano2, Comparador siguiente){
-        Integer valorMano1=transformation.apply(mano1);
-        Integer valorMano2=transformation.apply(mano2);
+    public Mano comparar(Function<Mano,Integer> transformacion, Mano mano1, Mano mano2, Comparador siguiente){
+        Integer valorMano1=transformacion.apply(mano1);
+        Integer valorMano2=transformacion.apply(mano2);
         if(valorMano1>valorMano2){
             return mano1;
         }

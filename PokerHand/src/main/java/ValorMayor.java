@@ -6,45 +6,27 @@ import java.util.stream.Collectors;
  * Created by fede on 10/04/17.
  */
 public class ValorMayor extends Comparador {
-    private static Carta cartaEmpate=new Carta(0,'.');
-    private static  Carta[] arrayEmpate={cartaEmpate};
-    private static Mano manoEmpate=new Mano(arrayEmpate);
-    public Carta cartaEmpate(){
-        return cartaEmpate;
-    };
-    public Mano manoEmpate(){
-        return manoEmpate;
-    };
-    public Integer conjuntoGanaContra(List<Carta> conjunto1, List<Carta> conjunto2){
-       Integer valorMayorConjunto1=conjunto1.stream().max((carta, carta2) ->carta.valor()-carta2.valor()).orElse(this.cartaEmpate()).valor();
-        Integer valorMayorConjunto2=conjunto2.stream().max((carta, carta2) ->carta.valor()-carta2.valor()).orElse(this.cartaEmpate()).valor();
-        if(valorMayorConjunto1==valorMayorConjunto2 && valorMayorConjunto1==0){
-            return 0;
+    public Mano conjuntoGanaContra(List<Carta> conjunto1,Mano mano1, List<Carta> conjunto2, Mano mano2){
+       Carta cartaValorMayorConjunto1=conjunto1.stream().max((carta, carta2) ->carta.valor()-carta2.valor()).orElse(Carta.cartaEmpate());
+        Carta cartaValorMayorConjunto2=conjunto2.stream().max((carta, carta2) ->carta.valor()-carta2.valor()).orElse(Carta.cartaEmpate());
+        if(cartaValorMayorConjunto1.esCartaEmpate()){
+            return Mano.manoEmpate();
         }
-        if(valorMayorConjunto1>valorMayorConjunto2){
-            return 1;
+        if(cartaValorMayorConjunto1.valor()>cartaValorMayorConjunto2.valor()){
+            return mano1;
         }
-        else if(valorMayorConjunto2>valorMayorConjunto1){
-            return -1;
+        else if(cartaValorMayorConjunto2.valor()>cartaValorMayorConjunto1.valor()){
+            return mano2;
         }
         else{
-            List<Carta> nuevoConjunto1= ( conjunto1.stream().filter(carta -> carta.valor() != valorMayorConjunto1)).collect(Collectors.toList());
-            List<Carta> nuevoConjunto2= conjunto2.stream().filter(carta -> carta.valor() != valorMayorConjunto2).collect(Collectors.toList());
-            return conjuntoGanaContra(nuevoConjunto1,nuevoConjunto2);
+            List<Carta> nuevoConjunto1= ( conjunto1.stream().filter(carta -> carta.valor() != cartaValorMayorConjunto1.valor())).collect(Collectors.toList());
+            List<Carta> nuevoConjunto2= conjunto2.stream().filter(carta -> carta.valor() != cartaValorMayorConjunto2.valor()).collect(Collectors.toList());
+            return conjuntoGanaContra(nuevoConjunto1,mano1,nuevoConjunto2,mano2);
         }
            }
 
     public Mano manoGanadora(Mano mano1,Mano mano2){
-        Integer valorDeComparacion=conjuntoGanaContra(mano1.cartas(),mano2.cartas());
-         if(valorDeComparacion>0){
-            return mano1;
-        }
-        else if(valorDeComparacion<0){
-            return mano2;
-        }
-        else{
-            return manoEmpate();
-         }
+       return conjuntoGanaContra(mano1.cartas(),mano1,mano2.cartas(),mano2);
     }
 
     @Override
@@ -65,8 +47,8 @@ public class ValorMayor extends Comparador {
         return "High card";
     }
     @Override
-    public String ganaConCarta(Jugador unJugador,Carta unaCarta) {
-        return unJugador.nombre()+ " Wins.-with " +this.nombre()+" : "+ unaCarta.denominacion()+".";
+    public String ganaConCarta(Carta unaCarta) {
+        return this.nombre()+" : "+ unaCarta.denominacion()+".";
     }
     @Override
     public Integer valorDeImportancia() {

@@ -23,7 +23,7 @@ public abstract class Comparador {
             return this.siguiente().mejorComparadorPara(cartas);
         }
     }
-    public String ganaConCarta(Jugador unJugador,Carta unaCarta){
-        return unJugador.nombre()+ " Wins.-with " +this.nombre() +".";
+    public String ganaConCarta(Carta unaCarta){
+        return this.nombre()+ ".";
     }
 }

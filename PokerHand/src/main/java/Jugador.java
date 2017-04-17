@@ -14,18 +14,20 @@ public class Jugador {
     public String nombre(){
         return nombre;
     }
+    public Jugador ganadorContra(Jugador otroJugador){
+        Mano manoGanadora=mano.ganadorContra(otroJugador.mano());
+        if(this.mano==manoGanadora){return this;}
+        else{return otroJugador;}
+
+    }
     public String jugarContra(Jugador otroJugador){
         Mano manoGanadora=mano.ganadorContra(otroJugador.mano());
-        if(manoGanadora==new ValorMayor().manoEmpate()) {
+        if(manoGanadora.esEmpate()) {
                 return "Tie.";
         }
         else{
-            Jugador ganador;
-          Comparador comparador = new EscaleraColor().mejorComparadorPara(manoGanadora.cartas());
-            if(this.mano==manoGanadora){ganador=this;}
-            else{ganador=otroJugador;}
-            return comparador.ganaConCarta(ganador,manoGanadora.cartaMasAlta());
-        }
+            return manoGanadora.ganaPara(this.ganadorContra(otroJugador));
+            }
 
     }
 

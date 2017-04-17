@@ -9,12 +9,14 @@ import java.util.List;
 public class Mano {
     protected List<Carta> cartas;
     private  Comparador mejorComparador;
-    private static Comparador comparadorMayor=new EscaleraColor();
+    private static final Comparador comparadorMayor=new EscaleraColor();
+    private static  final List<Carta> arrayEmpate=Arrays.asList(Carta.cartaEmpate());
+    private static  final Mano manoEmpate=new Mano(arrayEmpate);
 
-    public Mano(Carta[]... _cartas){
+    public Mano(List<Carta>... _cartas){
         cartas=new ArrayList<>();
         Arrays.asList(_cartas).stream().forEach(unasCartas ->
-                cartas.addAll(Arrays.asList(unasCartas))
+                cartas.addAll(unasCartas)
         );
         mejorComparador=comparadorMayor.mejorComparadorPara(cartas);
     }
@@ -38,6 +40,15 @@ public class Mano {
         else {
             return mejorComparador().manoGanadora(this,otraMano);
         }
+    }
+    public String ganaPara(Jugador unJugador){
+        return unJugador.nombre()+" Wins.-with "+mejorComparador().ganaConCarta(this.cartaMasAlta());
+    }
+    static public Mano manoEmpate(){
+        return manoEmpate;
+    }
+    public boolean esEmpate(){
+        return this==manoEmpate;
     }
     }
 
