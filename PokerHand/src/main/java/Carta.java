@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -6,13 +8,12 @@ import java.util.function.Function;
  * Created by fede on 10/04/17.
  */
 public class Carta {
-    //trabajando con el constructor de cartas para evitar switch
     protected Integer numero;
     protected Character palo;
     private String denominacion;
     private static final  Carta cartaEmpate=new Carta(5,'.',"empate");
-   private static final  Map<Character,Function<Character,Carta>> mapaDeFiguras=new HashMap<Character,Function<Character, Carta>>();
-    private static final  Map<Character,Runnable> mapaDePalos=new HashMap<Character,Runnable>();
+    private static final  Map<Character,Function<Character,Carta>> mapaDeFiguras=new HashMap<Character,Function<Character, Carta>>();
+    private static final  List<Character> palosValidos =new ArrayList<Character>();
     static
     {
         mapaDeFiguras.put('T',palo -> new Carta(10,palo,"10"));
@@ -20,11 +21,10 @@ public class Carta {
         mapaDeFiguras.put('Q',palo -> new Carta(12,palo,"Queen"));
         mapaDeFiguras.put('K',palo -> new Carta(13,palo,"King"));
         mapaDeFiguras.put('A',palo -> new Carta(14,palo,"Ace"));
-        mapaDePalos.put('H',() -> {});
-        mapaDePalos.put('C',() -> {}  );
-        mapaDePalos.put('D',()->{}  );
-        mapaDePalos.put('S',() -> {} );
-
+        palosValidos.add('H');
+        palosValidos.add('C');
+        palosValidos.add('D');
+        palosValidos.add('S');
     };
     public Integer valor(){
         return numero;
@@ -40,11 +40,12 @@ public class Carta {
             throw new ExcepcionDeCartaInvalida("valor invalido");
         }
     }
-    private void controlDePalo(Character palo){
-        mapaDePalos.getOrDefault(palo,() -> {throw new ExcepcionDeCartaInvalida("palo invalido");}).run();
+    private void controlDePalo(Character palo) throws ExcepcionDeCartaInvalida
+    {
+        palosValidos.stream().filter(character -> character==palo).findFirst().orElseThrow(() -> new ExcepcionDeCartaInvalida("palo invalido"));
 
     }
-    public Carta(Integer numero, Character palo){
+    public Carta(Integer numero, Character palo) throws ExcepcionDeCartaInvalida{
           controlDeValor(numero);
           controlDePalo(palo);
         this.numero = numero;
@@ -61,7 +62,7 @@ public class Carta {
     public Boolean esCartaEmpate(){
         return this==cartaEmpate();
     }
-     public  Carta(Character figura,Character palo){
+     public  Carta(Character figura,Character palo) throws ExcepcionDeCartaInvalida{
         controlDePalo(palo);
         Carta nuevaCarta=mapaDeFiguras.getOrDefault(figura,character -> {throw new ExcepcionDeCartaInvalida("valor invalido");}).apply(palo);
         this.numero=nuevaCarta.valor();

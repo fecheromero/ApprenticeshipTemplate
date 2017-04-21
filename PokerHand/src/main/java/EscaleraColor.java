@@ -11,7 +11,7 @@ public class EscaleraColor extends Escalera {
                 stream().findFirst().get().palo());
     }
     @Override
-    public Comparador siguiente(){
+    public Jugada siguiente(){
 
         return new Poker();
     }

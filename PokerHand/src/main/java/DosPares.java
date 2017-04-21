@@ -4,7 +4,7 @@ import java.util.List;
 /**
  * Created by fede on 10/04/17.
  */
-public class DosPares extends Comparador implements EncontradorDeConjuntos {
+public class DosPares extends Jugada implements EncontradorDeConjuntos {
     private Boolean controlDePrimerPar;
     public DosPares(){
 
@@ -17,13 +17,11 @@ public class DosPares extends Comparador implements EncontradorDeConjuntos {
     @Override
     public Mano manoGanadora(Mano mano1, Mano mano2) {
         if (controlDePrimerPar) {
-          return   new ComparadorGenerico()
-                    .comparar(mano -> Arrays.stream(this.pares(mano.cartas()))
+          return   this.comparar(mano -> Arrays.stream(this.pares(mano.cartas()))
                             .max((carta, carta1) -> carta1.valor() - carta.valor())
                             .get().valor(), mano1, mano2, reiterar());
         } else {
-           return  new ComparadorGenerico()
-                    .comparar(mano -> Arrays.stream(this.pares(mano.cartas()))
+           return  this.comparar(mano -> Arrays.stream(this.pares(mano.cartas()))
                             .min((carta, carta1) -> carta1.valor() - carta.valor())
                             .get().valor(), mano1, mano2, new ValorMayor());
 
@@ -37,7 +35,7 @@ public class DosPares extends Comparador implements EncontradorDeConjuntos {
     }
 
     @Override
-    public Comparador siguiente() {
+    public Jugada siguiente() {
 
         return new Par();
     }

@@ -4,10 +4,10 @@ import java.util.List;
 /**
  * Created by fede on 11/04/17.
  */
-public class Poker extends Comparador implements EncontradorDeConjuntos {
+public class Poker extends Jugada implements EncontradorDeConjuntos {
     @Override
     public Mano manoGanadora(Mano mano1, Mano mano2) {
-        return new ComparadorGenerico().comparar(mano -> Arrays.stream(this.pokers(mano.cartas())).
+        return this.comparar(mano -> Arrays.stream(this.pokers(mano.cartas())).
                 findFirst().get().valor(),mano1,mano2,new ValorMayor());
     }
 
@@ -18,7 +18,7 @@ public class Poker extends Comparador implements EncontradorDeConjuntos {
     }
 
     @Override
-    public Comparador siguiente() {
+    public Jugada siguiente() {
 
         return new Full();
     }

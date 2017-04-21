@@ -3,7 +3,7 @@ import java.util.List;
 /**
  * Created by fede on 11/04/17.
  */
-public class Color extends Comparador {
+public class Color extends Jugada {
     @Override
     public Mano manoGanadora(Mano mano1, Mano mano2) {
 
@@ -17,7 +17,7 @@ public class Color extends Comparador {
     }
 
     @Override
-    public Comparador siguiente() {
+    public Jugada siguiente() {
         return new Escalera();
     }
 

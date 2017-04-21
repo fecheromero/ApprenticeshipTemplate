@@ -1,11 +1,10 @@
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
  * Created by fede on 10/04/17.
  */
-public class ValorMayor extends Comparador {
+public class ValorMayor extends Jugada {
     public Mano conjuntoGanaContra(List<Carta> conjunto1,Mano mano1, List<Carta> conjunto2, Mano mano2){
        Carta cartaValorMayorConjunto1=conjunto1.stream().max((carta, carta2) ->carta.valor()-carta2.valor()).orElse(Carta.cartaEmpate());
         Carta cartaValorMayorConjunto2=conjunto2.stream().max((carta, carta2) ->carta.valor()-carta2.valor()).orElse(Carta.cartaEmpate());
@@ -36,7 +35,7 @@ public class ValorMayor extends Comparador {
     }
 
     @Override
-    public Comparador siguiente() {
+    public Jugada siguiente() {
 
         return this;
     }
