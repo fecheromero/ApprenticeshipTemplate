@@ -18,14 +18,5 @@ public class Full extends Jugada implements EncontradorDeConjuntos {
         return this.pares(cartas).length>=2 && this.trios(cartas).length>=3;
     }
 
-    @Override
-    public Jugada siguiente() {
 
-        return new Color();
-    }
-
-    @Override
-    public String nombre() {
-        return "Full House";
-    }
 }

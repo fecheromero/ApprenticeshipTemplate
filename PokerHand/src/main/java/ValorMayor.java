@@ -34,23 +34,6 @@ public class ValorMayor extends Jugada {
         return true;
     }
 
-    @Override
-    public Jugada siguiente() {
 
-        return this;
-    }
 
-    @Override
-    public String nombre() {
-
-        return "High card";
-    }
-    @Override
-    public String ganaConCarta(Carta unaCarta) {
-        return this.nombre()+" : "+ unaCarta.denominacion()+".";
-    }
-    @Override
-    public Integer valorDeImportancia() {
-        return 1;
-    }
 }

@@ -17,14 +17,4 @@ public class Pierna extends Jugada implements EncontradorDeConjuntos {
         return this.trios(cartas).length>=3;
     }
 
-    @Override
-    public Jugada siguiente() {
-
-        return new DosPares();
-    }
-
-    @Override
-    public String nombre() {
-        return "Three of a kind";
-    }
 }

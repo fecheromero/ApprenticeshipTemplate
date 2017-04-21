@@ -7,8 +7,6 @@ import java.util.List;
  */
 public class Mano {
     protected List<Carta> cartas;
-    private Jugada mejorJugadas;
-    private static final Jugada jugadaMayor =new EscaleraColor();
     private static  final List<Carta> arrayEmpate=Arrays.asList(Carta.cartaEmpate());
     private static  final Mano manoEmpate=new Mano();
 
@@ -20,8 +18,11 @@ public class Mano {
         Arrays.asList(_cartas).stream().forEach(unasCartas ->
                 cartas.addAll(unasCartas)
         );
-        mejorJugadas = jugadaMayor.mejorComparadorPara(cartas);
-    }
+        if(cartas.size()>5){
+            throw new ExcepcionDeManoInvalida("no se puede crear una mano con mas de 5 cartas");
+
+        }
+      }
     public Carta cartaMasAlta(){
       return cartas.stream().sorted((carta, otraCarta) ->otraCarta.valor()-carta.valor()).findFirst().get();
     }
@@ -29,28 +30,14 @@ public class Mano {
 
         return this.cartas;
     }
-    public Jugada mejorJugada(){
 
-        return this.mejorJugadas;
-    }
     public Mano ganadorContra(Mano otraMano){
-        if(mejorJugadas.leGanoA(otraMano.mejorJugada())){
-            return this;
-        }else if(otraMano.mejorJugada().leGanoA(mejorJugadas)){
-            return otraMano;
-        }
-        else {
-            return mejorJugada().manoGanadora(this,otraMano);
-        }
+
+       return new ManualDePoker().manoGanadora(this,otraMano);
     }
-    public String ganaPara(Jugador unJugador){
-        return unJugador.nombre()+" Wins.-with "+ mejorJugada().ganaConCarta(this.cartaMasAlta());
-    }
+
     static public Mano manoEmpate(){
         return manoEmpate;
-    }
-    public boolean esEmpate(){
-        return this==manoEmpate;
     }
     }
 

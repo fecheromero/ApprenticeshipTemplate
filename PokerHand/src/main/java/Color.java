@@ -16,13 +16,4 @@ public class Color extends Jugada {
                 stream().findFirst().get().palo());
     }
 
-    @Override
-    public Jugada siguiente() {
-        return new Escalera();
-    }
-
-    @Override
-    public String nombre() {
-        return "Flush";
-    }
 }

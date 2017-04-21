@@ -34,14 +34,5 @@ public class DosPares extends Jugada implements EncontradorDeConjuntos {
         return this.pares(cartas).length>=4;
     }
 
-    @Override
-    public Jugada siguiente() {
 
-        return new Par();
-    }
-
-    @Override
-    public String nombre() {
-        return "Two pairs";
-    }
 }

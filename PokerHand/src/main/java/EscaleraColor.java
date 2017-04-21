@@ -10,13 +10,4 @@ public class EscaleraColor extends Escalera {
                .allMatch(carta ->carta.palo()==cartas.
                 stream().findFirst().get().palo());
     }
-    @Override
-    public Jugada siguiente(){
-
-        return new Poker();
-    }
-    @Override
-    public String nombre(){
-        return"Straight flush";
-    }
 }

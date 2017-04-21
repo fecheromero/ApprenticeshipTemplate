@@ -18,14 +18,4 @@ public class Par extends Jugada implements EncontradorDeConjuntos {
         return this.pares(cartas).length>=2;
     }
 
-    @Override
-    public Jugada siguiente() {
-
-        return new ValorMayor();
-    }
-
-    @Override
-    public String nombre() {
-        return "Pair";
-    }
 }

@@ -17,14 +17,4 @@ public class Poker extends Jugada implements EncontradorDeConjuntos {
         return this.pokers(cartas).length>=4;
     }
 
-    @Override
-    public Jugada siguiente() {
-
-        return new Full();
-    }
-
-    @Override
-    public String nombre() {
-        return "Four of a kind";
-    }
 }

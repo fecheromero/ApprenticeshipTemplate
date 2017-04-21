@@ -13,5 +13,10 @@ public class EscaleraColorTest extends PokerHandTest{
         Mano mano2=new Mano(unaEscaleraDeCorazonesDe10alAs);
         Assert.assertEquals(mano1.ganadorContra(mano2),mano2);
     }
-
+    @Test
+    public  void manoGanadoraEnEscaleraColorConAsComoCartaMenor() {
+        Mano mano1= new Mano(unaEscaleraDeDiamanteDeAa5);
+        Mano mano2=new Mano(unaEscaleraDeCorazonesDe2a6);
+        Assert.assertEquals(mano1.ganadorContra(mano2),mano2);
+    }
 }
