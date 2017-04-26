@@ -9,7 +9,13 @@ attr_accessor :set
     self.teams.push(team2)
     self.set=TennisSet.new team1,team2
   end
+def controlValidTeam team
+  if(!teams.include? team)
+    raise 'invalid team'
+  end
+end
   def teamWinPoint team
+    controlValidTeam team
     team.winPointAgainst (self.teams.select{|unTeam|  unTeam!=team}.first)
     controlWin team
   end
@@ -17,7 +23,7 @@ attr_accessor :set
  def controlWin team
    rdo=team.score.win?
    if(rdo)
-     self.teams.each { |unTeam| unTeam.score=Score.scores.first }
+     self.teams.each { |unTeam| unTeam.score=LOVE }
      set.gameFor team
    end
    return rdo

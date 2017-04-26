@@ -1,10 +1,10 @@
 
-require_relative '../src/score'
+require_relative '../src/tennis_score'
 class TennisTeam
   attr_accessor :score
   attr_accessor :name
   def initialize name
-    self.score=Score.scores.first
+    self.score=TennisScore.scores.first
     self.name=name
 
   end
