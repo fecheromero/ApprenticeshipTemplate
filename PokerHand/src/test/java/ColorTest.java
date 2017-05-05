@@ -14,7 +14,7 @@ public class ColorTest extends PokerHandTest {
     protected List<Carta> unColorDeCorazonesConCartaMayor5;
 
     @Before
-    public void  setUp(){
+    public void      setUp(){
         unColorDeDiamantesConCartaMayorQ= Arrays.asList(new Carta(2,'D'),new Carta(2,'D'),new Carta(2,'D'),new Carta(2,'D'),new Carta('Q','D'));
         unColorDeCorazonesConCartaMayor5=Arrays.asList(new Carta(2,'H'),new Carta(2,'H'),new Carta(2,'H'),new Carta(2,'H'),new Carta(5,'H'));
     }
