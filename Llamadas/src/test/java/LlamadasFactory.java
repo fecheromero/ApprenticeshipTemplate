@@ -73,6 +73,7 @@ public class LlamadasFactory {
                 unNumeroDeTelefonoLocal(),
                 new NumeroDeTelefono(codigoLocal,1234));
     }
+
     public Facturador unFacturador(){
         FacturadorBuilder unFacturadorBuilder = new FacturadorBuilder();
         unFacturadorBuilder.valuadorPorDefecto(new ValuadorDeValorFijo(1.5,1231241));
@@ -114,5 +115,12 @@ public class LlamadasFactory {
 
     public Double valorPorMinutoSudamerica() {
     return valorPorMinutoSudamerica;
+    }
+
+    public Llamada unaLlamadaLocalEntreDiaHabilYFinDeSemana() {
+        return new Llamada(new DateTime(2017,5,5,23,0),new DateTime(2017,5,6,9,0),
+                unNumeroDeTelefonoLocal(),
+                new NumeroDeTelefono(codigoLocal,1234));
+
     }
 }

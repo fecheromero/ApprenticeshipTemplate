@@ -77,4 +77,11 @@ public class LlamadasTest {
                 60* factory.valorPorMinutoLocalSemanaHoraNoPico(),0.01);
     }
 
+    @Test
+    public void unaLlamadaEntreDiaHabilYFinDeSemanaSeValuaCorrectamenteYCambiaDeFacturador(){
+        Assert.assertEquals(factory.unFacturador().
+                        precioDeLlamada(factory.unaLlamadaLocalEntreDiaHabilYFinDeSemana()),
+                10*60* factory.valorPorMinutoLocalSemanaHoraNoPico(),0.01);
+    }
+
 }

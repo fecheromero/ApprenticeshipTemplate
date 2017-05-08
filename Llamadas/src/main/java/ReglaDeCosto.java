@@ -1,38 +1,39 @@
+import jdk.internal.util.xml.impl.Pair;
+
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Function;
 
 /**
  * Created by fede on 02/05/17.
  */
+
 public class ReglaDeCosto {
-    private Function<Llamada,Double> calculoDePrecio;
-    private Function<Llamada,Boolean> condicion;
-    public ReglaDeCosto(Function<Llamada,Boolean> condicion,Function<Llamada,Double> calculoDePrecio){
-        this.calculoDePrecio = calculoDePrecio;
-        this.condicion = condicion;
+    protected List<Integer> dias;
+    private IntervaloDiario intervalo;
+    private Double valorPorMinuto;
+
+    public ReglaDeCosto(Double valorPorMinuto,List<Integer> dias,IntervaloDiario intervalo){
+        this.valorPorMinuto = valorPorMinuto;
+        this.dias = dias;
+
+        this.intervalo = intervalo;
     }
-    public Double calcularValorPorRegla(Llamada unaLlamada){
-        return calculoDePrecio.apply(unaLlamada);
+    public Double calcularValorPorRegla(IntervaloDiarioEnUnDiaDeSemana unIntervaloDiarioEnUnDiaDeSemana){
+
+        return unIntervaloDiarioEnUnDiaDeSemana.intervalo().minutosSuperpuestos(intervalo)*valorPorMinuto;
     }
 
     public static ReglaDeCosto crearReglaParaDiasHabiles(IntervaloDiario intervalo,Double valorPorMinuto){
-        return  new ReglaDeCosto(
-                llamada -> llamada.inicio().dayOfWeek().get()<=5 ,
-                llamada -> llamada.intervalosDiarios().stream().map(intervaloDiarioDeLlamada ->
-                        intervaloDiarioDeLlamada.
-                                minutosSuperpuestos(intervalo)*valorPorMinuto).
-                        reduce((costo1, costo2) ->costo1+costo2).orElse(0.0)
-        );
+       return  new ReglaDeCosto(valorPorMinuto,Arrays.asList(1,2,3,4,5),intervalo);
     }
     public static ReglaDeCosto crearReglaParaFinesDeSemana(IntervaloDiario intervalo, Double valorPorMinuto){
-        return  new ReglaDeCosto(
-                llamada -> llamada.inicio().dayOfWeek().get()>5,
-                 llamada -> llamada.intervalosDiarios().stream().map(intervaloDiarioDeLlamada ->
-                        intervaloDiarioDeLlamada.
-                                minutosSuperpuestos(intervalo)*valorPorMinuto).
-                        reduce((costo1, costo2) ->costo1+costo2).orElse(0.0)
-        );
+        return    new ReglaDeCosto(valorPorMinuto,Arrays.asList(6,7),intervalo);
+
     }
-    public Boolean afectasA(Llamada unaLlamada){
-        return condicion.apply(unaLlamada);
+    public Boolean afectasA(IntervaloDiarioEnUnDiaDeSemana unIntervaloDiarioEnUnDiaDeSemana){
+
+        return dias.stream().anyMatch(dia -> unIntervaloDiarioEnUnDiaDeSemana.dia()==dia
+                && unIntervaloDiarioEnUnDiaDeSemana.intervalo().minutosSuperpuestos(intervalo)>0 );
     }
 }

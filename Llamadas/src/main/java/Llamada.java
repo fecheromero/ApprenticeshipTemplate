@@ -1,6 +1,6 @@
+
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,18 +42,21 @@ public class Llamada {
         return origen;
     }
 
-    public List<IntervaloDiario> intervalosDiarios() {
-        List<IntervaloDiario> intervalos=new ArrayList<IntervaloDiario>();
+    public List<IntervaloDiarioEnUnDiaDeSemana> intervalosDiarios() {
+        List<IntervaloDiarioEnUnDiaDeSemana> intervalos=new ArrayList<IntervaloDiarioEnUnDiaDeSemana>();
         Llamada llamadaRestante=this;
         while(llamadaConCambioDeDia(llamadaRestante)){
-                intervalos.add(new IntervaloDiario(new Hora(inicio.getHourOfDay(),inicio().getMinuteOfHour()),
-                                new Hora(24,0)));
+                intervalos.add(new IntervaloDiarioEnUnDiaDeSemana
+                        (new IntervaloDiario(new Hora(inicio.getHourOfDay(),inicio().getMinuteOfHour()), new Hora(24,0)),
+                                llamadaRestante.inicio().getDayOfWeek()));
                 llamadaRestante=new Llamada(llamadaRestante.inicio().plusDays(1).withHourOfDay(0).withMinuteOfHour(0),llamadaRestante.fin(),origen,destino);
             }
-            intervalos.add(new IntervaloDiario(new Hora(llamadaRestante.inicio.getHourOfDay(),
+            intervalos.add(new IntervaloDiarioEnUnDiaDeSemana(
+                    new IntervaloDiario(new Hora(llamadaRestante.inicio.getHourOfDay(),
                                                 llamadaRestante.inicio().getMinuteOfHour()),
                                                 new Hora(llamadaRestante.fin().getHourOfDay(),
-                                                        llamadaRestante.fin().getMinuteOfHour())));
+                                                        llamadaRestante.fin().getMinuteOfHour())),
+                    llamadaRestante.inicio().getDayOfWeek()));
         return intervalos;
 
     }

@@ -15,7 +15,10 @@ public class ValuadorDeValorVariable extends Valuador {
         return unaLlamada.destino().codigoDeArea()==unaLlamada.origen().codigoDeArea();
     }
     public double precioDeLlamadaClasificada(Llamada unaLlamada){
-        return reglasDeCosto.stream().filter(reglaDeCosto -> reglaDeCosto.afectasA(unaLlamada)).
-                map(reglaDeCosto ->reglaDeCosto.calcularValorPorRegla(unaLlamada)).reduce((costo1, costo2) ->costo1+costo2 ).orElse(0.0);
-    }
+          return unaLlamada.intervalosDiarios().stream().map(intervaloDiarioEnUnDiaDeSemana ->
+        reglasDeCosto.stream().filter(reglaDeCosto -> reglaDeCosto.afectasA(intervaloDiarioEnUnDiaDeSemana))
+                .map(reglaDeCosto -> reglaDeCosto.calcularValorPorRegla(intervaloDiarioEnUnDiaDeSemana)).
+                reduce((costo2, costo1) ->costo1+costo2 ).orElse(0.0)).reduce((costo2, costo1) ->
+                    costo1+costo2).orElse(0.0);
+                  }
 }
