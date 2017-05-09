@@ -1,11 +1,15 @@
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.MonthDay;
 
-/**
- * Created by sandro on 04/05/17.
- */
-public class ReglaDeFeriadoDiaDeMes implements ReglaDeFeriado {
+@Entity
 
+@Table(name = "\"regla de feriado de dia de mes\"")
+public class ReglaDeFeriadoDiaDeMes implements ReglaDeFeriado {
+    @Id
+    @GeneratedValue
+    private Long id;
+    @Transient
     protected MonthDay diaDeMesFeriado;
 
     public ReglaDeFeriadoDiaDeMes(MonthDay unDiaDeMes) {

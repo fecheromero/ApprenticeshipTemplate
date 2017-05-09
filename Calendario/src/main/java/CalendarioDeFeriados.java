@@ -1,3 +1,4 @@
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -5,8 +6,14 @@ import java.util.List;
 /**
  * Created by sandro on 03/05/17.
  */
+@Entity
 public class CalendarioDeFeriados {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     protected List<ReglaDeFeriado> reglasDeFeriado;
 
     public CalendarioDeFeriados(){
