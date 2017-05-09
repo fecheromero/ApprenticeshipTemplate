@@ -10,7 +10,15 @@ public class AlgoConUnaReglaDeFeriado {
     long id;
 
 
-    protected ReglaDeFeriado unaRegla;
+    public ReglaDeFeriado unaRegla;
+
+    public ReglaDeFeriado getUnaRegla(){
+        return unaRegla;
+    }
+
+    public void setUnaRegla(ReglaDeFeriado _unaRegla){
+         unaRegla=_unaRegla;
+    }
 
 
 }

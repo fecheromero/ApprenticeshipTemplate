@@ -18,13 +18,12 @@
 
         <property name="show_sql">false</property>
 
-
         <mapping class="AlgoConUnaReglaDeFeriado"/>
         <mapping class="ReglaDeFeriadoConIntervalo"/>
         <mapping class="ReglaDeFeriadoDeDiaDeSemana"/>
         <mapping class="ReglaDeFeriadoDiaDeMes"/>
         <mapping class="ReglaDeFeriadoFecha"/>
-         <mapping class="ReglaDeFeriado"/>
-
+        <mapping class="ReglaDeFeriado"/>
+        <mapping class="CalendarioDeFeriados"/>
     </session-factory>
 </hibernate-configuration>

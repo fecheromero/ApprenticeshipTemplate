@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.*;
 import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 @Controller
@@ -29,11 +30,16 @@ public class CalendarioController {
                 .buildSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction tx = session.beginTransaction();
-        session.save(new AlgoConUnaReglaDeFeriado());
-       // Long id =  (Long) session.save(new CalendarioDeFeriados());
+        ReglaDeFeriadoDeDiaDeSemana unaRegla=new ReglaDeFeriadoDeDiaDeSemana(DayOfWeek.TUESDAY);
+        CalendarioDeFeriados unCalendario=new CalendarioDeFeriados();
+        unCalendario.agregarReglaDeFeriado(unaRegla);
 
+        Long id =  (Long) session.save(unCalendario);
         System.out.print("ahora toy aca");
-        //System.out.println(session.get(CalendarioDeFeriados.class, id).esFeriado(LocalDate.now()));
+        System.out.println(session.get(CalendarioDeFeriados.class, id).esFeriado(LocalDate.now()));
+        System.out.println(session.get(CalendarioDeFeriados.class, id).esFeriado(LocalDate.now().plusDays(1)));
+        CalendarioDeFeriados cal=session.get(CalendarioDeFeriados.class, id);
+
         tx.commit();
         session.close();
         System.out.print("toy aca");

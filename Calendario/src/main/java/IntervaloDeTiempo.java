@@ -1,8 +1,13 @@
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.time.LocalDate;
 
 /**
  * Created by sandro on 04/05/17.
  */
+@Embeddable
 public class IntervaloDeTiempo {
 
     private final LocalDate inicioIntervalo;

@@ -4,13 +4,10 @@ import java.time.LocalDate;
 
 @Entity
 
-@Table(name = "\"regla de feriado de dia de semana\"")
-public class ReglaDeFeriadoDeDiaDeSemana implements ReglaDeFeriado {
-    @Id
-    @GeneratedValue
-    private Long id;
 
-    @Transient
+public class ReglaDeFeriadoDeDiaDeSemana extends ReglaDeFeriado {
+
+    //@Enumerated(EnumType.ORDINAL)
     protected DayOfWeek diaDeSemanaFeriado;
 
     public ReglaDeFeriadoDeDiaDeSemana(DayOfWeek unDiaDeSemana) {

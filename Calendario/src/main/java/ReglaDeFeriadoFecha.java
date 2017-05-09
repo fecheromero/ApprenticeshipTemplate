@@ -2,12 +2,8 @@ import javax.persistence.*;
 import java.time.LocalDate;
 @Entity
 
-@Table(name = "\"regla de feriado de fecha\"")
-public class ReglaDeFeriadoFecha implements ReglaDeFeriado {
-    @Id
-    @GeneratedValue
-    private Long id;
-    @Basic
+public class ReglaDeFeriadoFecha extends ReglaDeFeriado {
+
     private final LocalDate fecha;
 
     public ReglaDeFeriadoFecha(LocalDate unaFecha){

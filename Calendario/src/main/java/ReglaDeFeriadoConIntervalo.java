@@ -6,16 +6,11 @@ import java.time.LocalDate;
  * Created by sandro on 04/05/17.
  */
 @Entity
-@Table(name = "\"regla de feriado con intervalo\"")
-public class ReglaDeFeriadoConIntervalo implements ReglaDeFeriado {
+public class ReglaDeFeriadoConIntervalo extends ReglaDeFeriado {
 
-    @Id
-    @GeneratedValue
-    private Long id;
-    @Transient
+    @Embedded
     private IntervaloDeTiempo intervalo;
 
-    @Transient
     private ReglaDeFeriado reglaDeFeriado;
 
     public ReglaDeFeriadoConIntervalo(ReglaDeFeriado unaReglaDeFeriado, IntervaloDeTiempo unIntervalo){

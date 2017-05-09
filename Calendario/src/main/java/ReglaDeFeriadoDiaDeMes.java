@@ -4,12 +4,10 @@ import java.time.MonthDay;
 
 @Entity
 
-@Table(name = "\"regla de feriado de dia de mes\"")
-public class ReglaDeFeriadoDiaDeMes implements ReglaDeFeriado {
-    @Id
-    @GeneratedValue
-    private Long id;
-    @Transient
+public class ReglaDeFeriadoDiaDeMes extends ReglaDeFeriado {
+
+
+
     protected MonthDay diaDeMesFeriado;
 
     public ReglaDeFeriadoDiaDeMes(MonthDay unDiaDeMes) {
