@@ -52,5 +52,4 @@ build-iPhoneSimulator/
 .idea
 out
 *.iml
-resources
 */target/
