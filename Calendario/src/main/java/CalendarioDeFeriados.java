@@ -11,11 +11,11 @@ import java.util.List;
 public class CalendarioDeFeriados {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    protected List<ReglaDeFeriado> reglasDeFeriado;
+    private List<ReglaDeFeriado> reglasDeFeriado;
 
     public CalendarioDeFeriados(){
         reglasDeFeriado = new ArrayList<>();
@@ -25,8 +25,22 @@ public class CalendarioDeFeriados {
         return reglasDeFeriado.stream().anyMatch(regla -> regla.esFeriado(unaFecha));
     }
 
-
     public void agregarReglaDeFeriado(ReglaDeFeriado reglaDeFeriado) {
         reglasDeFeriado.add(reglaDeFeriado);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+    public List<ReglaDeFeriado> getreglasDeFeriado() {
+        return reglasDeFeriado;
+    }
+
+    public void setreglasDeFeriado(List<ReglaDeFeriado> reglaDeFeriados) {
+        this.reglasDeFeriado = reglaDeFeriados;
     }
 }

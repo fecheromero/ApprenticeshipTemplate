@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Entity
 abstract class  ReglaDeFeriado implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     abstract boolean esFeriado(LocalDate unaFecha);

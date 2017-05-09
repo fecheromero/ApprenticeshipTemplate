@@ -1,13 +1,15 @@
-import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
-/**
- * Created by fede on 08/05/17.
- */
+import static org.junit.Assert.assertNotEquals;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class PersistenciaTest {
-    CalendarioDeFeriados calendario;
+    private CalendarioController lala;
 
-    @Before
-    public void setUp(){
-        calendario = new CalendarioDeFeriados();
+    @Test
+    public void lalaSeLevantaBien(){
+        assertNotEquals(lala, null);
     }
 }

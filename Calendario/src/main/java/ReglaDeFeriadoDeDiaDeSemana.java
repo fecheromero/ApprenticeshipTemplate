@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 public class ReglaDeFeriadoDeDiaDeSemana extends ReglaDeFeriado {
 
-    //@Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.ORDINAL)
     protected DayOfWeek diaDeSemanaFeriado;
 
     public ReglaDeFeriadoDeDiaDeSemana(DayOfWeek unDiaDeSemana) {

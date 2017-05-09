@@ -2,11 +2,6 @@
  * Created by fede on 08/05/17.
  */
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
-import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.*;
 import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
@@ -18,31 +13,19 @@ import java.time.LocalDate;
 @EnableAutoConfiguration
 public class CalendarioController {
 
+    private RepositorioCalendarios repo;
+
     @RequestMapping("/")
     @ResponseBody
     String home() {
          return "Hello Maggie!";
     }
 
-    public static void main(String[] args) throws Exception {
-        SessionFactory sessionFactory = new Configuration()
-                .configure()
-                .buildSessionFactory();
-        Session session = sessionFactory.openSession();
-        Transaction tx = session.beginTransaction();
+    public void crearyGuardar() throws Exception {
         ReglaDeFeriadoDeDiaDeSemana unaRegla=new ReglaDeFeriadoDeDiaDeSemana(DayOfWeek.TUESDAY);
         CalendarioDeFeriados unCalendario=new CalendarioDeFeriados();
         unCalendario.agregarReglaDeFeriado(unaRegla);
-
-        Long id =  (Long) session.save(unCalendario);
-        System.out.print("ahora toy aca");
-        System.out.println(session.get(CalendarioDeFeriados.class, id).esFeriado(LocalDate.now()));
-        System.out.println(session.get(CalendarioDeFeriados.class, id).esFeriado(LocalDate.now().plusDays(1)));
-        CalendarioDeFeriados cal=session.get(CalendarioDeFeriados.class, id);
-
-        tx.commit();
-        session.close();
-        System.out.print("toy aca");
-        //SpringApplication.run(CalendarioController.class, args);
+        repo.save(unCalendario);
     }
+
 }

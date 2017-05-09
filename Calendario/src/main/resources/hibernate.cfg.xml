@@ -18,8 +18,6 @@
 
         <property name="show_sql">false</property>
 
-        <mapping class="AlgoConUnaReglaDeFeriado"/>
-        <mapping class="ReglaDeFeriadoConIntervalo"/>
         <mapping class="ReglaDeFeriadoDeDiaDeSemana"/>
         <mapping class="ReglaDeFeriadoDiaDeMes"/>
         <mapping class="ReglaDeFeriadoFecha"/>
