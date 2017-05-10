@@ -13,6 +13,10 @@ public class ReglaDeFeriadoDeDiaDeSemana extends ReglaDeFeriado {
 
     protected DayOfWeek diaDeSemanaFeriado;
 
+    public ReglaDeFeriadoDeDiaDeSemana(){
+
+    }
+
     public ReglaDeFeriadoDeDiaDeSemana(DayOfWeek unDiaDeSemana) {
         diaDeSemanaFeriado = unDiaDeSemana;
     }

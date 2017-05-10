@@ -9,6 +9,10 @@ public class ReglaDeFeriadoFecha extends ReglaDeFeriado {
 
     private final LocalDate fecha;
 
+    public ReglaDeFeriado(){
+
+    }
+
     public ReglaDeFeriadoFecha(LocalDate unaFecha){
         fecha = unaFecha;
     }
