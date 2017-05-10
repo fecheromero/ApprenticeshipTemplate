@@ -8,8 +8,6 @@ import java.time.MonthDay;
 
 public class ReglaDeFeriadoDiaDeMes extends ReglaDeFeriado {
 
-
-
     protected MonthDay diaDeMesFeriado;
 
     public ReglaDeFeriadoDiaDeMes(MonthDay unDiaDeMes) {

@@ -7,15 +7,14 @@ import java.time.LocalDate;
 
 public class ReglaDeFeriadoFecha extends ReglaDeFeriado {
 
-    private final LocalDate fecha;
-
-    public ReglaDeFeriado(){
-
-    }
+    protected LocalDate fecha;
 
     public ReglaDeFeriadoFecha(LocalDate unaFecha){
         fecha = unaFecha;
     }
+
+    public ReglaDeFeriadoFecha(){}
+
     @Override
     public boolean esFeriado(LocalDate unaFecha) {
         return unaFecha.equals(fecha);
