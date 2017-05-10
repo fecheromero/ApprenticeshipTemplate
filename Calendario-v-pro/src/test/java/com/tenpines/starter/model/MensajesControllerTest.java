@@ -1,7 +1,7 @@
 package com.tenpines.starter.model;
 
 import com.tenpines.starter.integracion.SpringTestBase;
-import com.tenpines.starter.servicios.ServicioDeMensajes;
+import com.tenpines.starter.servicios.ServicioDeFeriados;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -12,11 +12,11 @@ import static org.hamcrest.Matchers.empty;
 public class MensajesControllerTest extends SpringTestBase {
 
     @Autowired
-    private ServicioDeMensajes servicioDeMensajes;
+    private ServicioDeFeriados servicioDeFeriados;
 
     @Test
     public void agregar() throws Exception {
-        assertThat(servicioDeMensajes.buscarTodos(), is(empty()));
+        assertThat(servicioDeFeriados.buscarTodos(), is(empty()));
     }
 
 }
