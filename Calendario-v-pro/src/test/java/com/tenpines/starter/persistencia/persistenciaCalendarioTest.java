@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Example;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -63,6 +64,7 @@ public class persistenciaCalendarioTest {
         veinticincoDeMayo = new ReglaDeFeriadoDiaDeMes(MonthDay.of(5, 25));
         unCalendario.agregarReglaDeFeriado(veinticincoDeMayo);
         repoDeCalendarios.save(unCalendario);
+        unCalendario = repoDeCalendarios.findAll().get(0);
 
         Assert.assertTrue(unCalendario.esFeriado(LocalDate.of(2017, 5, 25)));
     }
@@ -73,6 +75,8 @@ public class persistenciaCalendarioTest {
         navidad = new ReglaDeFeriadoFecha(LocalDate.of(2017, 12, 25));
         unCalendario.agregarReglaDeFeriado(navidad);
         repoDeCalendarios.save(unCalendario);
+        unCalendario = repoDeCalendarios.findAll().get(0);
+        repoDeCalendarios.findOne(Example.of(unCalendario));
 
         Assert.assertTrue(unCalendario.esFeriado(LocalDate.of(2017, 12, 25)));
     }
