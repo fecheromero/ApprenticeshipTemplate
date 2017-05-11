@@ -56,6 +56,7 @@ public class persistenciaCalendarioTest {
         unCalendario = repoDeCalendarios.findAll().get(0);
 
         Assert.assertTrue(unCalendario.esFeriado(LocalDate.of(2017, 05, 01)));
+        Assert.assertFalse(unCalendario.esFeriado(LocalDate.of(2017,05,02)));
     }
 
     @Test
@@ -67,6 +68,8 @@ public class persistenciaCalendarioTest {
         unCalendario = repoDeCalendarios.findAll().get(0);
 
         Assert.assertTrue(unCalendario.esFeriado(LocalDate.of(2017, 5, 25)));
+        Assert.assertFalse(unCalendario.esFeriado(LocalDate.of(2017,05,02)));
+
     }
 
    @Test
@@ -78,7 +81,9 @@ public class persistenciaCalendarioTest {
         unCalendario = repoDeCalendarios.findAll().get(0);
 
         Assert.assertTrue(unCalendario.esFeriado(LocalDate.of(2017, 12, 25)));
-    }
+       Assert.assertFalse(unCalendario.esFeriado(LocalDate.of(2017,05,02)));
+
+   }
 
 
     @Test
@@ -92,7 +97,8 @@ public class persistenciaCalendarioTest {
         unCalendario.agregarReglaDeFeriado(navidad);
         repoDeCalendarios.save(unCalendario);
         unCalendario = repoDeCalendarios.findAll().get(0);
-
         Assert.assertTrue(unCalendario.esFeriado(LocalDate.of(2017, 12, 25)));
+        Assert.assertFalse(unCalendario.esFeriado(LocalDate.of(2014,12,25)));
+
     }
 }
