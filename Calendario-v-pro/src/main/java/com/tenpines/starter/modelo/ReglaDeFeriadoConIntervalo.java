@@ -1,7 +1,6 @@
 package com.tenpines.starter.modelo;
 
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 /**
@@ -12,9 +11,10 @@ public class ReglaDeFeriadoConIntervalo extends ReglaDeFeriado {
 
     @Embedded
     private IntervaloDeTiempo intervalo;
-
+    @OneToOne(cascade = CascadeType.ALL)
     private ReglaDeFeriado reglaDeFeriado;
 
+    public ReglaDeFeriadoConIntervalo(){}
     public ReglaDeFeriadoConIntervalo(ReglaDeFeriado unaReglaDeFeriado, IntervaloDeTiempo unIntervalo){
         reglaDeFeriado = unaReglaDeFeriado;
         intervalo = unIntervalo;

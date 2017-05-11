@@ -9,16 +9,18 @@ import java.time.LocalDate;
 @Embeddable
 public class IntervaloDeTiempo {
 
-    private final LocalDate inicioIntervalo;
-    private final LocalDate finIntervalo;
+    private  LocalDate inicioIntervalo;
+    private  LocalDate finIntervalo;
 
-    public IntervaloDeTiempo(LocalDate inicio, LocalDate fin){
+     public IntervaloDeTiempo(LocalDate inicio, LocalDate fin){
         if(inicio.isAfter(fin)){
             throw new RuntimeException("Intervalo no valiso, la fecha de inicio debe de ser menor a la de fin");
         }
             inicioIntervalo = inicio;
             finIntervalo = fin;
         }
+    public IntervaloDeTiempo(){};
+
     public static IntervaloDeTiempo fromDateToDate(LocalDate inicio,LocalDate fin){
         return new IntervaloDeTiempo(inicio,fin);
     }

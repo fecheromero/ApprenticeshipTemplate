@@ -18,14 +18,15 @@ import java.time.MonthDay;
 /**
  * Created by fede on 10/05/17.
  */
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("test")
+@ActiveProfiles("testPostgres")
 
 public class persistenciaCalendarioTest {
     public ReglaDeFeriadoDeDiaDeSemana lunesFeriado;
     public ReglaDeFeriadoDiaDeMes veinticincoDeMayo;
-    public ReglaDeFeriadoFecha navidad;
+    public ReglaDeFeriadoDiaDeMes navidad;
     public IntervaloDeTiempo intervalo;
     public ReglaDeFeriadoConIntervalo reglaIntervalo;
     public LocalDate anioNuevoDosMilQuince;
@@ -72,33 +73,36 @@ public class persistenciaCalendarioTest {
 
     }
 
-   @Test
-    public void sePuedeGuardarUnCalendarioConUnaReglaDeFechaYConsultarPorElla() {
-        CalendarioDeFeriados unCalendario = new CalendarioDeFeriados();
-        navidad = new ReglaDeFeriadoFecha(LocalDate.of(2017, 12, 25));
-        unCalendario.agregarReglaDeFeriado(navidad);
-        repoDeCalendarios.save(unCalendario);
-        unCalendario = repoDeCalendarios.findAll().get(0);
-
-        Assert.assertTrue(unCalendario.esFeriado(LocalDate.of(2017, 12, 25)));
-       Assert.assertFalse(unCalendario.esFeriado(LocalDate.of(2017,05,02)));
-
-   }
-
-
     @Test
     public void sePuedeGuardarUnCalendarioConUnaReglaDeFechaConRangoYConsultarPorElla() {
         CalendarioDeFeriados unCalendario = new CalendarioDeFeriados();
-        navidad = new ReglaDeFeriadoFecha(LocalDate.of(2017, 12, 25));
+        navidad = new ReglaDeFeriadoDiaDeMes(MonthDay.of(12,25));
         anioNuevoDosMilQuince = LocalDate.of(2015,1,1);
         anioNuevoDosMilDieciocho = LocalDate.of(2018,1,1);
         intervalo = new IntervaloDeTiempo(anioNuevoDosMilQuince, anioNuevoDosMilDieciocho);
         reglaIntervalo = new ReglaDeFeriadoConIntervalo(navidad, intervalo);
-        unCalendario.agregarReglaDeFeriado(navidad);
+        unCalendario.agregarReglaDeFeriado(reglaIntervalo);
         repoDeCalendarios.save(unCalendario);
         unCalendario = repoDeCalendarios.findAll().get(0);
         Assert.assertTrue(unCalendario.esFeriado(LocalDate.of(2017, 12, 25)));
         Assert.assertFalse(unCalendario.esFeriado(LocalDate.of(2014,12,25)));
+
+    }
+
+    @Test
+    public void sePuedeGuardarUnCalendarioConUnaReglaDeDiaConRangoYConsultarPorElla() {
+        CalendarioDeFeriados unCalendario = new CalendarioDeFeriados();
+        lunesFeriado = new ReglaDeFeriadoDeDiaDeSemana(DayOfWeek.MONDAY);
+        anioNuevoDosMilQuince = LocalDate.of(2015,1,1);
+        anioNuevoDosMilDieciocho = LocalDate.of(2018,1,1);
+        intervalo = new IntervaloDeTiempo(anioNuevoDosMilQuince, anioNuevoDosMilDieciocho);
+        reglaIntervalo = new ReglaDeFeriadoConIntervalo(lunesFeriado, intervalo);
+        unCalendario.agregarReglaDeFeriado(reglaIntervalo);
+        repoDeCalendarios.save(unCalendario);
+        unCalendario = repoDeCalendarios.findAll().get(0);
+
+        Assert.assertTrue(unCalendario.esFeriado(LocalDate.of(2017, 5, 8)));
+        Assert.assertFalse(unCalendario.esFeriado(LocalDate.of(2014,6,30)));
 
     }
 }
