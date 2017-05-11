@@ -6,12 +6,11 @@ import java.time.LocalDate;
 /**
  * Created by sandro on 04/05/17.
  */
-@Entity
 public class ReglaDeFeriadoConIntervalo extends ReglaDeFeriado {
 
-    @Embedded
+
     private IntervaloDeTiempo intervalo;
-    @OneToOne(cascade = CascadeType.ALL)
+
     private ReglaDeFeriado reglaDeFeriado;
 
     public ReglaDeFeriadoConIntervalo(){}
@@ -20,7 +19,12 @@ public class ReglaDeFeriadoConIntervalo extends ReglaDeFeriado {
         intervalo = unIntervalo;
 
     }
-
+    public IntervaloDeTiempo intervalo(){
+        return intervalo;
+    }
+    public ReglaDeFeriado reglaDeFeriado(){
+        return reglaDeFeriado;
+    }
     @Override
     public boolean esFeriado(LocalDate unaFecha) {
         return reglaDeFeriado.esFeriado(unaFecha) && intervalo.contains(unaFecha);

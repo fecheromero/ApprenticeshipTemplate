@@ -6,21 +6,15 @@ import javax.persistence.Enumerated;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 
-@Entity
-
-
 public class ReglaDeFeriadoDeDiaDeSemana extends ReglaDeFeriado {
 
     protected DayOfWeek diaDeSemanaFeriado;
-
-    public ReglaDeFeriadoDeDiaDeSemana(){
-
-    }
-
     public ReglaDeFeriadoDeDiaDeSemana(DayOfWeek unDiaDeSemana) {
         diaDeSemanaFeriado = unDiaDeSemana;
     }
-
+    public  DayOfWeek diaDeSemana(){
+        return diaDeSemanaFeriado;
+    }
     @Override
     public boolean esFeriado(LocalDate unaFecha) {
         return diaDeSemanaFeriado == unaFecha.getDayOfWeek();

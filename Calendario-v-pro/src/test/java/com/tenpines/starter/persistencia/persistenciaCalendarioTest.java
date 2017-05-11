@@ -1,7 +1,7 @@
 package com.tenpines.starter.persistencia;
 
 import com.tenpines.starter.modelo.*;
-import com.tenpines.starter.repositorios.RepositorioDeCalendarios;
+import com.tenpines.starter.servicios.persistidorDeCalendarios;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +21,7 @@ import java.time.MonthDay;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ActiveProfiles("testPostgres")
+@ActiveProfiles("test")
 
 public class persistenciaCalendarioTest {
     public ReglaDeFeriadoDeDiaDeSemana lunesFeriado;
@@ -33,19 +33,20 @@ public class persistenciaCalendarioTest {
     public LocalDate anioNuevoDosMilDieciocho;
 
     @Autowired
-    protected RepositorioDeCalendarios repoDeCalendarios;
+    protected persistidorDeCalendarios persistidorDeCalendarios;
 
     @Before
     public void setUp() {
-        repoDeCalendarios.deleteAll();
+        persistidorDeCalendarios.deleteAll();
     }
+
 
     @Test
     public void sePuedeGuardarUnCalendarioEnLaBaseYRecuperarlo() {
         CalendarioDeFeriados unCalendario = new CalendarioDeFeriados();
-        repoDeCalendarios.save(unCalendario);
+        persistidorDeCalendarios.save(unCalendario);
 
-        Assert.assertEquals(1, repoDeCalendarios.findAll().size());
+        Assert.assertEquals(1, persistidorDeCalendarios.findAll().size());
     }
 
     @Test
@@ -53,8 +54,8 @@ public class persistenciaCalendarioTest {
         CalendarioDeFeriados unCalendario = new CalendarioDeFeriados();
         lunesFeriado = new ReglaDeFeriadoDeDiaDeSemana(DayOfWeek.MONDAY);
         unCalendario.agregarReglaDeFeriado(lunesFeriado);
-        repoDeCalendarios.save(unCalendario);
-        unCalendario = repoDeCalendarios.findAll().get(0);
+        persistidorDeCalendarios.save(unCalendario);
+        unCalendario = persistidorDeCalendarios.findAll().get(0);
 
         Assert.assertTrue(unCalendario.esFeriado(LocalDate.of(2017, 05, 01)));
         Assert.assertFalse(unCalendario.esFeriado(LocalDate.of(2017,05,02)));
@@ -65,8 +66,8 @@ public class persistenciaCalendarioTest {
         CalendarioDeFeriados unCalendario = new CalendarioDeFeriados();
         veinticincoDeMayo = new ReglaDeFeriadoDiaDeMes(MonthDay.of(5, 25));
         unCalendario.agregarReglaDeFeriado(veinticincoDeMayo);
-        repoDeCalendarios.save(unCalendario);
-        unCalendario = repoDeCalendarios.findAll().get(0);
+        persistidorDeCalendarios.save(unCalendario);
+        unCalendario = persistidorDeCalendarios.findAll().get(0);
 
         Assert.assertTrue(unCalendario.esFeriado(LocalDate.of(2017, 5, 25)));
         Assert.assertFalse(unCalendario.esFeriado(LocalDate.of(2017,05,02)));
@@ -82,8 +83,8 @@ public class persistenciaCalendarioTest {
         intervalo = new IntervaloDeTiempo(anioNuevoDosMilQuince, anioNuevoDosMilDieciocho);
         reglaIntervalo = new ReglaDeFeriadoConIntervalo(navidad, intervalo);
         unCalendario.agregarReglaDeFeriado(reglaIntervalo);
-        repoDeCalendarios.save(unCalendario);
-        unCalendario = repoDeCalendarios.findAll().get(0);
+        persistidorDeCalendarios.save(unCalendario);
+        unCalendario = persistidorDeCalendarios.findAll().get(0);
         Assert.assertTrue(unCalendario.esFeriado(LocalDate.of(2017, 12, 25)));
         Assert.assertFalse(unCalendario.esFeriado(LocalDate.of(2014,12,25)));
 
@@ -98,11 +99,12 @@ public class persistenciaCalendarioTest {
         intervalo = new IntervaloDeTiempo(anioNuevoDosMilQuince, anioNuevoDosMilDieciocho);
         reglaIntervalo = new ReglaDeFeriadoConIntervalo(lunesFeriado, intervalo);
         unCalendario.agregarReglaDeFeriado(reglaIntervalo);
-        repoDeCalendarios.save(unCalendario);
-        unCalendario = repoDeCalendarios.findAll().get(0);
+        persistidorDeCalendarios.save(unCalendario);
+        unCalendario = persistidorDeCalendarios.findAll().get(0);
 
         Assert.assertTrue(unCalendario.esFeriado(LocalDate.of(2017, 5, 8)));
         Assert.assertFalse(unCalendario.esFeriado(LocalDate.of(2014,6,30)));
 
     }
+
 }
