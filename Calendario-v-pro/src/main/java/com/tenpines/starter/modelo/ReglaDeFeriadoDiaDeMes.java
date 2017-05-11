@@ -10,6 +10,8 @@ public class ReglaDeFeriadoDiaDeMes extends ReglaDeFeriado {
 
     protected MonthDay diaDeMesFeriado;
 
+    public ReglaDeFeriadoDiaDeMes(){}
+
     public ReglaDeFeriadoDiaDeMes(MonthDay unDiaDeMes) {
         diaDeMesFeriado = unDiaDeMes;
     }

@@ -1,9 +1,6 @@
 package com.tenpines.starter.persistencia;
 
-import com.tenpines.starter.modelo.CalendarioDeFeriados;
-import com.tenpines.starter.modelo.ReglaDeFeriadoDeDiaDeSemana;
-import com.tenpines.starter.modelo.ReglaDeFeriadoDiaDeMes;
-import com.tenpines.starter.modelo.ReglaDeFeriadoFecha;
+import com.tenpines.starter.modelo.*;
 import com.tenpines.starter.repositorios.RepositorioDeCalendarios;
 import org.junit.Assert;
 import org.junit.Before;
@@ -11,7 +8,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Example;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -30,6 +26,10 @@ public class persistenciaCalendarioTest {
     public ReglaDeFeriadoDeDiaDeSemana lunesFeriado;
     public ReglaDeFeriadoDiaDeMes veinticincoDeMayo;
     public ReglaDeFeriadoFecha navidad;
+    public IntervaloDeTiempo intervalo;
+    public ReglaDeFeriadoConIntervalo reglaIntervalo;
+    public LocalDate anioNuevoDosMilQuince;
+    public LocalDate anioNuevoDosMilDieciocho;
 
     @Autowired
     protected RepositorioDeCalendarios repoDeCalendarios;
@@ -69,14 +69,29 @@ public class persistenciaCalendarioTest {
         Assert.assertTrue(unCalendario.esFeriado(LocalDate.of(2017, 5, 25)));
     }
 
-    @Test
+   @Test
     public void sePuedeGuardarUnCalendarioConUnaReglaDeFechaYConsultarPorElla() {
         CalendarioDeFeriados unCalendario = new CalendarioDeFeriados();
         navidad = new ReglaDeFeriadoFecha(LocalDate.of(2017, 12, 25));
         unCalendario.agregarReglaDeFeriado(navidad);
         repoDeCalendarios.save(unCalendario);
         unCalendario = repoDeCalendarios.findAll().get(0);
-        repoDeCalendarios.findOne(Example.of(unCalendario));
+
+        Assert.assertTrue(unCalendario.esFeriado(LocalDate.of(2017, 12, 25)));
+    }
+
+
+    @Test
+    public void sePuedeGuardarUnCalendarioConUnaReglaDeFechaConRangoYConsultarPorElla() {
+        CalendarioDeFeriados unCalendario = new CalendarioDeFeriados();
+        navidad = new ReglaDeFeriadoFecha(LocalDate.of(2017, 12, 25));
+        anioNuevoDosMilQuince = LocalDate.of(2015,1,1);
+        anioNuevoDosMilDieciocho = LocalDate.of(2018,1,1);
+        intervalo = new IntervaloDeTiempo(anioNuevoDosMilQuince, anioNuevoDosMilDieciocho);
+        reglaIntervalo = new ReglaDeFeriadoConIntervalo(navidad, intervalo);
+        unCalendario.agregarReglaDeFeriado(navidad);
+        repoDeCalendarios.save(unCalendario);
+        unCalendario = repoDeCalendarios.findAll().get(0);
 
         Assert.assertTrue(unCalendario.esFeriado(LocalDate.of(2017, 12, 25)));
     }
