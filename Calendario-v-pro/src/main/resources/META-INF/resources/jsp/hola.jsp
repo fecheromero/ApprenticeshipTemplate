@@ -9,7 +9,7 @@
     <title>HELLO</title>
 </head>
 <body>
-    <h1 id="titulo">Mensajes</h1>
+    <h1 id="titulo">Saraza</h1>
     <ul>
         <c:forEach items="${mensajes}" var="mensaje">
             <li class="msj">${mensaje}</li>

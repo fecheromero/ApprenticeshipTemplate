@@ -9,6 +9,7 @@ import java.time.LocalDate;
 public class ReglaDeFeriadoDeDiaDeSemana extends ReglaDeFeriado {
 
     protected DayOfWeek diaDeSemanaFeriado;
+    public DayOfWeek getDiaDeSemanaFeriado(){return diaDeSemanaFeriado;}
     public ReglaDeFeriadoDeDiaDeSemana(DayOfWeek unDiaDeSemana) {
         diaDeSemanaFeriado = unDiaDeSemana;
     }

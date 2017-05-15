@@ -1,7 +1,7 @@
 package com.tenpines.starter.persistencia;
 
 import com.tenpines.starter.modelo.*;
-import com.tenpines.starter.servicios.persistidorDeCalendarios;
+import com.tenpines.starter.servicios.PersistidorDeCalendarios;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,29 +33,29 @@ public class persistenciaCalendarioTest {
     public LocalDate anioNuevoDosMilDieciocho;
 
     @Autowired
-    protected persistidorDeCalendarios persistidorDeCalendarios;
+    protected PersistidorDeCalendarios PersistidorDeCalendarios;
 
     @Before
     public void setUp() {
-        persistidorDeCalendarios.deleteAll();
+        PersistidorDeCalendarios.deleteAll();
     }
 
 
     @Test
     public void sePuedeGuardarUnCalendarioEnLaBaseYRecuperarlo() {
-        CalendarioDeFeriados unCalendario = new CalendarioDeFeriados();
-        persistidorDeCalendarios.save(unCalendario);
+        CalendarioDeFeriados unCalendario = new CalendarioDeFeriados("un calendario");
+        PersistidorDeCalendarios.save(unCalendario);
 
-        Assert.assertEquals(1, persistidorDeCalendarios.findAll().size());
+        Assert.assertEquals(1, PersistidorDeCalendarios.findAll().size());
     }
 
     @Test
     public void sePuedeGuardarUnCalendarioConUnaReglaDiaDeSemanaYConsultarPorElla() {
-        CalendarioDeFeriados unCalendario = new CalendarioDeFeriados();
+        CalendarioDeFeriados unCalendario = new CalendarioDeFeriados("un calendario");
         lunesFeriado = new ReglaDeFeriadoDeDiaDeSemana(DayOfWeek.MONDAY);
         unCalendario.agregarReglaDeFeriado(lunesFeriado);
-        persistidorDeCalendarios.save(unCalendario);
-        unCalendario = persistidorDeCalendarios.findAll().get(0);
+        PersistidorDeCalendarios.save(unCalendario);
+        unCalendario = PersistidorDeCalendarios.findAll().get(0);
 
         Assert.assertTrue(unCalendario.esFeriado(LocalDate.of(2017, 05, 01)));
         Assert.assertFalse(unCalendario.esFeriado(LocalDate.of(2017,05,02)));
@@ -63,11 +63,11 @@ public class persistenciaCalendarioTest {
 
     @Test
     public void sePuedeGuardarUnCalendarioConUnaReglaDiaDeMesYConsultarPorElla() {
-        CalendarioDeFeriados unCalendario = new CalendarioDeFeriados();
+        CalendarioDeFeriados unCalendario = new CalendarioDeFeriados("un calendario");
         veinticincoDeMayo = new ReglaDeFeriadoDiaDeMes(MonthDay.of(5, 25));
         unCalendario.agregarReglaDeFeriado(veinticincoDeMayo);
-        persistidorDeCalendarios.save(unCalendario);
-        unCalendario = persistidorDeCalendarios.findAll().get(0);
+        PersistidorDeCalendarios.save(unCalendario);
+        unCalendario = PersistidorDeCalendarios.findAll().get(0);
 
         Assert.assertTrue(unCalendario.esFeriado(LocalDate.of(2017, 5, 25)));
         Assert.assertFalse(unCalendario.esFeriado(LocalDate.of(2017,05,02)));
@@ -76,15 +76,15 @@ public class persistenciaCalendarioTest {
 
     @Test
     public void sePuedeGuardarUnCalendarioConUnaReglaDeFechaConRangoYConsultarPorElla() {
-        CalendarioDeFeriados unCalendario = new CalendarioDeFeriados();
+        CalendarioDeFeriados unCalendario = new CalendarioDeFeriados("un calendario");
         navidad = new ReglaDeFeriadoDiaDeMes(MonthDay.of(12,25));
         anioNuevoDosMilQuince = LocalDate.of(2015,1,1);
         anioNuevoDosMilDieciocho = LocalDate.of(2018,1,1);
         intervalo = new IntervaloDeTiempo(anioNuevoDosMilQuince, anioNuevoDosMilDieciocho);
         reglaIntervalo = new ReglaDeFeriadoConIntervalo(navidad, intervalo);
         unCalendario.agregarReglaDeFeriado(reglaIntervalo);
-        persistidorDeCalendarios.save(unCalendario);
-        unCalendario = persistidorDeCalendarios.findAll().get(0);
+        PersistidorDeCalendarios.save(unCalendario);
+        unCalendario = PersistidorDeCalendarios.findAll().get(0);
         Assert.assertTrue(unCalendario.esFeriado(LocalDate.of(2017, 12, 25)));
         Assert.assertFalse(unCalendario.esFeriado(LocalDate.of(2014,12,25)));
 
@@ -92,15 +92,15 @@ public class persistenciaCalendarioTest {
 
     @Test
     public void sePuedeGuardarUnCalendarioConUnaReglaDeDiaConRangoYConsultarPorElla() {
-        CalendarioDeFeriados unCalendario = new CalendarioDeFeriados();
+        CalendarioDeFeriados unCalendario = new CalendarioDeFeriados("un calendario");
         lunesFeriado = new ReglaDeFeriadoDeDiaDeSemana(DayOfWeek.MONDAY);
         anioNuevoDosMilQuince = LocalDate.of(2015,1,1);
         anioNuevoDosMilDieciocho = LocalDate.of(2018,1,1);
         intervalo = new IntervaloDeTiempo(anioNuevoDosMilQuince, anioNuevoDosMilDieciocho);
         reglaIntervalo = new ReglaDeFeriadoConIntervalo(lunesFeriado, intervalo);
         unCalendario.agregarReglaDeFeriado(reglaIntervalo);
-        persistidorDeCalendarios.save(unCalendario);
-        unCalendario = persistidorDeCalendarios.findAll().get(0);
+        PersistidorDeCalendarios.save(unCalendario);
+        unCalendario = PersistidorDeCalendarios.findAll().get(0);
 
         Assert.assertTrue(unCalendario.esFeriado(LocalDate.of(2017, 5, 8)));
         Assert.assertFalse(unCalendario.esFeriado(LocalDate.of(2014,6,30)));

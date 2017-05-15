@@ -12,6 +12,13 @@ public class IntervaloDeTiempo {
     private  LocalDate inicioIntervalo;
     private  LocalDate finIntervalo;
 
+    public LocalDate getInicioIntervalo(){
+        return inicioIntervalo;
+    }
+
+    public LocalDate getFinIntervalo(){
+        return finIntervalo;
+    }
      public IntervaloDeTiempo(LocalDate inicio, LocalDate fin){
         if(inicio.isAfter(fin)){
             throw new RuntimeException("Intervalo no valido, la fecha de inicio debe de ser menor a la de fin");

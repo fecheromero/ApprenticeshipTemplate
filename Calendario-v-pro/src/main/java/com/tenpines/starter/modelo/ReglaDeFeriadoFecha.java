@@ -7,7 +7,7 @@ import java.time.LocalDate;
 public class ReglaDeFeriadoFecha extends ReglaDeFeriado {
 
     protected LocalDate fecha;
-
+    public LocalDate getFecha(){return fecha;}
     public ReglaDeFeriadoFecha(LocalDate fecha){
         this.fecha = fecha;
     }

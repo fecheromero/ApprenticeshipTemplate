@@ -8,7 +8,7 @@ import java.time.MonthDay;
 public class ReglaDeFeriadoDiaDeMes extends ReglaDeFeriado {
 
     protected MonthDay diaDeMesFeriado;
-
+    public MonthDay getDiaDeMesFeriado(){return diaDeMesFeriado;}
     @Override
     public boolean esFeriado(LocalDate unaFecha) {
         return diaDeMesFeriado.equals(MonthDay.of(unaFecha.getMonth(), unaFecha.getDayOfMonth()));

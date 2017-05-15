@@ -1,6 +1,5 @@
 package com.tenpines.starter.servicios;
 
-import com.sun.org.apache.regexp.internal.RE;
 import com.tenpines.starter.modelo.CalendarioDeFeriados;
 import com.tenpines.starter.persistencia.CalendarioDeFeriadosPersistible;
 import com.tenpines.starter.repositorios.RepositorioDeCalendarios;
@@ -10,11 +9,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * Created by fede on 11/05/17.
- */
 @Service
-public class persistidorDeCalendarios {
+public class PersistidorDeCalendarios {
 @Autowired
     RepositorioDeCalendarios repo;
 

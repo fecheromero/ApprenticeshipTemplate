@@ -13,7 +13,8 @@ public class ReglaDeFeriadoConIntervalo extends ReglaDeFeriado {
 
     private ReglaDeFeriado reglaDeFeriado;
 
-    public ReglaDeFeriadoConIntervalo(){}
+    public IntervaloDeTiempo getIntervalo(){return intervalo;}
+    public ReglaDeFeriado getReglaDeFeriado(){return reglaDeFeriado;}
     public ReglaDeFeriadoConIntervalo(ReglaDeFeriado unaReglaDeFeriado, IntervaloDeTiempo unIntervalo){
         reglaDeFeriado = unaReglaDeFeriado;
         intervalo = unIntervalo;

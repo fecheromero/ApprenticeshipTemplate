@@ -16,10 +16,18 @@ public class CalendarioDeFeriadosPersistible {
     private Long id;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ReglaDeFeriadoPersistible> reglasDeFeriado=new ArrayList<ReglaDeFeriadoPersistible>();
+
+    private String nombre;
+
     public CalendarioDeFeriadosPersistible(){}
 
+    public CalendarioDeFeriadosPersistible(String nombre) {
+
+        this.nombre = nombre;
+    }
+
     public static CalendarioDeFeriadosPersistible obtenerCalendarioPersistible(CalendarioDeFeriados calendario){
-            CalendarioDeFeriadosPersistible unCalendarioPersistible=new CalendarioDeFeriadosPersistible();
+            CalendarioDeFeriadosPersistible unCalendarioPersistible=new CalendarioDeFeriadosPersistible(calendario.getNombre());
                 calendario.reglasDeFeriado().stream().map(reglaDeFeriado ->
                 TransformadorDeReglasDeFeriado.transformarAPersistible(reglaDeFeriado)).
                         forEach(reglaDeFeriadoPersistible ->
@@ -27,7 +35,7 @@ public class CalendarioDeFeriadosPersistible {
         return unCalendarioPersistible;
     }
     public CalendarioDeFeriados obtenerCalendarioDeFeriados(){
-        CalendarioDeFeriados unCalendario=new CalendarioDeFeriados();
+        CalendarioDeFeriados unCalendario=new CalendarioDeFeriados(this.nombre);
         this.reglasDeFeriado().stream().map(
                 reglaDeFeriadoPersistible ->
                         TransformadorDeReglasDeFeriado.destransformarDePersistible(reglaDeFeriadoPersistible))
