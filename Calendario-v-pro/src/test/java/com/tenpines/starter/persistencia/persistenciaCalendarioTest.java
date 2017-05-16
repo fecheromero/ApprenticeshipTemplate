@@ -1,7 +1,7 @@
 package com.tenpines.starter.persistencia;
 
 import com.tenpines.starter.modelo.*;
-import com.tenpines.starter.servicios.PersistidorDeCalendarios;
+import com.tenpines.starter.repositorios.RepositorioDeCalendarios;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +33,7 @@ public class persistenciaCalendarioTest {
     public LocalDate anioNuevoDosMilDieciocho;
 
     @Autowired
-    protected PersistidorDeCalendarios PersistidorDeCalendarios;
+    protected RepositorioDeCalendarios PersistidorDeCalendarios;
 
     @Before
     public void setUp() {

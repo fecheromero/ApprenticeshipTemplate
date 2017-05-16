@@ -1,16 +1,19 @@
 package com.tenpines.starter.modelo;
 
+import org.springframework.data.repository.cdi.Eager;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
 /**
  * Created by sandro on 04/05/17.
  */
+@Entity
 public class ReglaDeFeriadoConIntervalo extends ReglaDeFeriado {
 
-
+    @Embedded
     private IntervaloDeTiempo intervalo;
-
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private ReglaDeFeriado reglaDeFeriado;
 
     public IntervaloDeTiempo getIntervalo(){return intervalo;}
@@ -20,6 +23,7 @@ public class ReglaDeFeriadoConIntervalo extends ReglaDeFeriado {
         intervalo = unIntervalo;
 
     }
+    public ReglaDeFeriadoConIntervalo(){}
     public IntervaloDeTiempo intervalo(){
         return intervalo;
     }

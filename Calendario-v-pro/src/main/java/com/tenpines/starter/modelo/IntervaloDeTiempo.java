@@ -1,5 +1,7 @@
 package com.tenpines.starter.modelo;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.Embeddable;
 import java.time.LocalDate;
 
@@ -10,6 +12,7 @@ import java.time.LocalDate;
 public class IntervaloDeTiempo {
 
     private  LocalDate inicioIntervalo;
+
     private  LocalDate finIntervalo;
 
     public LocalDate getInicioIntervalo(){

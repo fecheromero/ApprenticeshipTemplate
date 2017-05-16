@@ -4,19 +4,32 @@ import javax.persistence.Entity;
 import java.time.LocalDate;
 import java.time.MonthDay;
 
-
+@Entity
 public class ReglaDeFeriadoDiaDeMes extends ReglaDeFeriado {
 
-    protected MonthDay diaDeMesFeriado;
-    public MonthDay getDiaDeMesFeriado(){return diaDeMesFeriado;}
+
+    protected Integer mes;
+    protected Integer diaDeMes;
     @Override
     public boolean esFeriado(LocalDate unaFecha) {
-        return diaDeMesFeriado.equals(MonthDay.of(unaFecha.getMonth(), unaFecha.getDayOfMonth()));
+        return getDiaDeMesFeriado().equals(MonthDay.of(unaFecha.getMonth(), unaFecha.getDayOfMonth()));
+    }
+
+    public MonthDay getDiaDeMesFeriado() {
+        return MonthDay.of(mes, diaDeMes);
+    }
+    public Integer getMes() {
+        return mes;
+    }
+    public Integer getDiaDeMes() {
+        return diaDeMes;
+    }
+
+    public ReglaDeFeriadoDiaDeMes(){
     }
     public ReglaDeFeriadoDiaDeMes(MonthDay diaDeMesFeriado){
-        this.diaDeMesFeriado = diaDeMesFeriado;
+        this.mes =diaDeMesFeriado.getMonthValue();
+        this.diaDeMes =diaDeMesFeriado.getDayOfMonth();
     }
-    public MonthDay diaDeMes(){
-        return diaDeMesFeriado;
-    }
+
 }

@@ -31,9 +31,7 @@ public abstract class RESTTestBase {
     @Autowired
     protected ObjectMapper objectMapper;
 
-    protected String json(Object o) throws IOException {
-        return objectMapper.writeValueAsString(o);
-    }
+
 
     @Before
     public void setupRestClient() throws Exception {
