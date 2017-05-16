@@ -118,4 +118,8 @@ public class CalendarioController {
         }
         return repo.findAll().stream().filter(calendarioDeFeriados -> calendarioDeFeriados.esFeriado(dia)).collect(Collectors.toList());
     }
+    /*TODO
+    *TEEEEEEEEEEEEEEEEEEEEEST
+    *PARSEO DE LAS REGLAS SIN TYPE
+    * */
 }
