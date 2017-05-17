@@ -23,7 +23,7 @@ public abstract class RESTTestBase {
     protected final static MediaType JSON_CONTENT_TYPE = new MediaType(MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype(),
             Charset.forName("utf8"));
-    protected MockMvc mockClient;
+    protected MockMvc   mockClient;
 
     @Autowired
     protected WebApplicationContext webApplicationContext;

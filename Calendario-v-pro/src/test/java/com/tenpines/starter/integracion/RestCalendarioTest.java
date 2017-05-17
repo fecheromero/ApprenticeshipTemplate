@@ -4,10 +4,14 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.tenpines.starter.modelo.*;
 import com.tenpines.starter.repositorios.RepositorioDeCalendarios;
+import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.lang.reflect.Type;
 import java.time.DayOfWeek;
@@ -49,6 +53,23 @@ public class RestCalendarioTest extends RESTTestBase {
         persistidorDeCalendarios.save(unCalendario);
     }
 
+    @After
+    public void tearDown() {
+        persistidorDeCalendarios.deleteAll();
+    }
+
+    public String calendarioDeArgentina() {
+        return "[{\"id\":" + unCalendario.getId().toString() + ",\"reglasDeFeriado\":[{\"type\":\"com.tenpines.starter.modelo.ReglaDeFeriadoDeDiaDeSemana\",\"diaDeSemanaFeriado\":\"MONDAY\"},{\"type\":\"com.tenpines.starter.modelo.ReglaDeFeriadoDiaDeMes\",\"mes\":12,\"diaDeMes\":22,\"diaDeMesFeriado\":{\"month\":\"DECEMBER\",\"dayOfMonth\":22,\"monthValue\":12}},{\"type\":\"com.tenpines.starter.modelo.ReglaDeFeriadoFecha\",\"fecha\":{\"year\":2017,\"month\":\"MAY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"},\"era\":\"CE\",\"dayOfYear\":145,\"leapYear\":false,\"dayOfWeek\":\"THURSDAY\",\"dayOfMonth\":25,\"monthValue\":5}},{\"type\":\"com.tenpines.starter.modelo.ReglaDeFeriadoConIntervalo\",\"intervalo\":{\"inicioIntervalo\":{\"year\":2015,\"month\":\"DECEMBER\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"},\"era\":\"CE\",\"dayOfYear\":344,\"leapYear\":false,\"dayOfWeek\":\"THURSDAY\",\"dayOfMonth\":10,\"monthValue\":12},\"finIntervalo\":{\"year\":2019,\"month\":\"DECEMBER\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"},\"era\":\"CE\",\"dayOfYear\":344,\"leapYear\":false,\"dayOfWeek\":\"TUESDAY\",\"dayOfMonth\":10,\"monthValue\":12}},\"reglaDeFeriado\":{\"type\":\"com.tenpines.starter.modelo.ReglaDeFeriadoDiaDeMes\",\"mes\":2,\"diaDeMes\":20,\"diaDeMesFeriado\":{\"month\":\"FEBRUARY\",\"dayOfMonth\":20,\"monthValue\":2}}}],\"nombre\":\"un calendario bonito\"}]";
+    }
+
+    public String getObjetoYParseoAString(String url) throws Exception {
+        return mockClient.perform(get(url))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andReturn().getResponse().getContentAsString();
+    }
+
     @Test
     public void xxx() throws Exception {
         mockClient.perform(get("/")).andDo(print()).andExpect(status().isOk())
@@ -56,15 +77,10 @@ public class RestCalendarioTest extends RESTTestBase {
     }
 
     @Test
-    public void xxx2() throws Exception {
-        String jsonResultado = mockClient.perform(get("/calendarios"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                .andReturn().getResponse().getContentAsString();
-        Type listType = new TypeToken<ArrayList<CalendarioDeFeriados>>() {
-        }.getType();
-        List<CalendarioDeFeriados> resultados = gson.fromJson(jsonResultado, listType);
+    public void testGetCalendarios() throws Exception {
+        String jsonResultado = getObjetoYParseoAString("/calendarios");
+
+        JSONAssert.assertEquals(calendarioDeArgentina(), jsonResultado, false);
 
     }
 }
