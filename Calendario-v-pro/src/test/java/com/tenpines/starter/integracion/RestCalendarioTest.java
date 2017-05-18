@@ -3,6 +3,7 @@ package com.tenpines.starter.integracion;
 import com.tenpines.starter.modelo.*;
 import com.tenpines.starter.repositorios.RepositorioDeCalendarios;
 import com.tenpines.starter.web.Endpoints;
+import net.sf.cglib.core.Local;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -67,7 +68,7 @@ public class RestCalendarioTest extends RESTTestBase {
 
     }
 
-    public ResultActions postJsonResultanteDeLaURL(String url,Object body) throws Exception {
+    public ResultActions postJsonResultanteDeLaURL(String url, Object body) throws Exception {
         return mockClient.perform(post(url).content(objectMapper.writeValueAsString(body)).contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -103,7 +104,7 @@ public class RestCalendarioTest extends RESTTestBase {
                         .collect(Collectors.toList())
         );
 
-        ResultActions resultado = getJsonResultanteDeLaURL(Endpoints.CALENDARIOS+"?nombre=Argentina");
+        ResultActions resultado = getJsonResultanteDeLaURL(Endpoints.CALENDARIOS + "?nombre=Argentina");
         asertarMensajeValor(resultado, ".length()", 1);
         asertarMensajeValor(resultado, "[0].nombre", "calendarioDeArgentina");
     }
@@ -114,7 +115,7 @@ public class RestCalendarioTest extends RESTTestBase {
                 listaDeCalendarios.stream().filter(calendarioDeFeriados -> calendarioDeFeriados.getNombre().contains("tutuca"))
                         .collect(Collectors.toList())
         );
-        ResultActions resultado = getJsonResultanteDeLaURL(Endpoints.CALENDARIOS+"?nombre=tutuca");
+        ResultActions resultado = getJsonResultanteDeLaURL(Endpoints.CALENDARIOS + "?nombre=tutuca");
         asertarMensajeValor(resultado, ".length()", 0);
 
     }
@@ -123,17 +124,28 @@ public class RestCalendarioTest extends RESTTestBase {
     public void testGetCalendarioPorId() throws Exception {
         Long id = unCalendario.getId();
         given(repo.findOne(id)).willReturn(unCalendario);
-        ResultActions resultado = getJsonResultanteDeLaURL(Endpoints.CALENDARIOS +"/"+ id.toString());
+        ResultActions resultado = getJsonResultanteDeLaURL(Endpoints.CALENDARIOS + "/" + id);
         asertarMensajeValor(resultado, ".id", id.intValue());
     }
 
     @Test
     public void testPostCalendario() throws Exception {
         CalendarioDeFeriados unCalendarioMas = new CalendarioDeFeriados("unCalendarioMas");
-        ResultActions resultado=postJsonResultanteDeLaURL(Endpoints.CALENDARIOS,unCalendarioMas);
+        ResultActions resultado = postJsonResultanteDeLaURL(Endpoints.CALENDARIOS, unCalendarioMas);
         given(repo.save(unCalendarioMas)).willReturn(unCalendarioMas);
-        asertarMensajeValor(resultado,"","exito!");
+        asertarMensajeValor(resultado, "", "exito!");
     }
 
-
+    @Test
+    public void testGetFeriadosPorIdDeCalendario() throws Exception {
+        Long id = unCalendario.getId();
+        given(repo.findOne(id)).willReturn(unCalendario);
+        given(repo.findOne(id).feriadosEntre(LocalDate.of(2017, 1, 1), LocalDate.of(2018, 1, 1)))
+                .willReturn(Arrays.asList(LocalDate.of(2017, 12, 22),
+                        LocalDate.of(2017, 5, 25),
+                        LocalDate.of(2017, 2, 20))
+                );
+        ResultActions resultado = getJsonResultanteDeLaURL(Endpoints.CALENDARIOS + "/" + id.toString() + "/feriados");
+        asertarMensajeValor(resultado, ".length()", 3);
+    }
 }
