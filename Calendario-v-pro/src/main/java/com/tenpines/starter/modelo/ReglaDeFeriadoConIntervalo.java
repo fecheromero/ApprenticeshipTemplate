@@ -1,5 +1,6 @@
 package com.tenpines.starter.modelo;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.springframework.data.repository.cdi.Eager;
 
 import javax.persistence.*;
@@ -9,6 +10,8 @@ import java.time.LocalDate;
  * Created by sandro on 04/05/17.
  */
 @Entity
+
+@JsonDeserialize()
 public class ReglaDeFeriadoConIntervalo extends ReglaDeFeriado {
 
     @Embedded

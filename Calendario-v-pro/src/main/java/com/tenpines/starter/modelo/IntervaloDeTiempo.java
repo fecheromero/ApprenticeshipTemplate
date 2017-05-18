@@ -1,5 +1,9 @@
 package com.tenpines.starter.modelo;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.Embeddable;
@@ -10,7 +14,6 @@ import java.time.LocalDate;
  */
 @Embeddable
 public class IntervaloDeTiempo {
-
     private  LocalDate inicioIntervalo;
 
     private  LocalDate finIntervalo;

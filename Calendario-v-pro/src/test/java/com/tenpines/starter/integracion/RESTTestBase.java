@@ -18,9 +18,8 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 
 @RunWith(SpringRunner.class)
-//@SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-@WebMvcTest(CalendarioController.class)
 public abstract class RESTTestBase {
     protected final static MediaType JSON_CONTENT_TYPE = new MediaType(MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype(),

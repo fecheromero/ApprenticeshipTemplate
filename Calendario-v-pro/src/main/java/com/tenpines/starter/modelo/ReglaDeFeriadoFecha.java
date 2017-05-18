@@ -1,9 +1,16 @@
 package com.tenpines.starter.modelo;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+
 import javax.persistence.Entity;
 import java.time.LocalDate;
 
 @Entity
+
+@JsonDeserialize()
 public class ReglaDeFeriadoFecha extends ReglaDeFeriado {
 
     protected LocalDate fecha;

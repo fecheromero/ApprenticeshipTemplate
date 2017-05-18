@@ -1,5 +1,7 @@
 package com.tenpines.starter.modelo;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.tenpines.starter.utils.DeserializadorDeReglasDeFeriado;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.Entity;
@@ -9,6 +11,8 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 @Entity
+
+@JsonDeserialize()
 public class ReglaDeFeriadoDeDiaDeSemana extends ReglaDeFeriado {
 
     @Enumerated(EnumType.STRING)

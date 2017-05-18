@@ -1,10 +1,14 @@
 package com.tenpines.starter.modelo;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import javax.persistence.Entity;
 import java.time.LocalDate;
 import java.time.MonthDay;
 
 @Entity
+
+@JsonDeserialize()
 public class ReglaDeFeriadoDiaDeMes extends ReglaDeFeriado {
 
 
@@ -12,10 +16,10 @@ public class ReglaDeFeriadoDiaDeMes extends ReglaDeFeriado {
     protected Integer diaDeMes;
     @Override
     public boolean esFeriado(LocalDate unaFecha) {
-        return getDiaDeMesFeriado().equals(MonthDay.of(unaFecha.getMonth(), unaFecha.getDayOfMonth()));
+        return diaDeMesFeriado().equals(MonthDay.of(unaFecha.getMonth(), unaFecha.getDayOfMonth()));
     }
 
-    public MonthDay getDiaDeMesFeriado() {
+    public MonthDay diaDeMesFeriado() {
         return MonthDay.of(mes, diaDeMes);
     }
     public Integer getMes() {

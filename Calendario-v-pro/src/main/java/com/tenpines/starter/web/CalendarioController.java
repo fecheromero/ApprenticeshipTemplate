@@ -10,6 +10,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.MonthDay;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,13 +42,13 @@ public class CalendarioController {
     }
 
 
-    @RequestMapping(value = {Endpoints.CALENDARIOS + "/{id}"}, method = RequestMethod.GET)
+    @RequestMapping(value = {Endpoints.CALENDARIOID}, method = RequestMethod.GET)
     public CalendarioDeFeriados buscarCalendarioPorID(@PathVariable(value = "id") Long id) {
         return repo.findOne(id);
     }
 
 
-    @RequestMapping(value = {Endpoints.CALENDARIOS + "/{id}"}, method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = {Endpoints.CALENDARIOID}, method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String actualizarCalendario(@PathVariable(value = "id") Long id, @RequestBody CalendarioDeFeriados unCalendario) {
         CalendarioDeFeriados calendario = repo.findOne(id);
         calendario.setNombre(unCalendario.getNombre());
@@ -57,7 +58,7 @@ public class CalendarioController {
         return "exito";
     }
 
-    @RequestMapping(value = {Endpoints.CALENDARIOS + "/{id}/feriados"},
+    @RequestMapping(value = {Endpoints.CALENDARIOID + "/feriados"},
             method = RequestMethod.GET)
     public List<LocalDate> obtenerFeriados(@PathVariable(value = "id") Long id,
                                            @RequestParam(value = "desde", defaultValue = "") String diaDesde,
@@ -81,7 +82,7 @@ public class CalendarioController {
         return repo.findOne(id).feriadosEntre(inicio, fin);
     }
 
-    @RequestMapping(value = {Endpoints.CALENDARIOS + "/{id}/reglas_de_feriado"}, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = {Endpoints.CALENDARIOID + "/reglas_de_feriado"}, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public String crearNuevaReglaDeFeriado(@PathVariable(value = "id") Long id, @RequestBody ReglaDeFeriado unaRegla) {
         CalendarioDeFeriados unCalendario = repo.findOne(id);
         unCalendario.agregarReglaDeFeriado(unaRegla);
