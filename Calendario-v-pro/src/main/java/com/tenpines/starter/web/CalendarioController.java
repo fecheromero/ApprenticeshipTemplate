@@ -28,34 +28,37 @@ public class CalendarioController {
 
     @RequestMapping(value = Endpoints.CALENDARIOS, method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public String crearCalendario(@RequestBody CalendarioDeFeriados unCalendario) {
-        repo.save(unCalendario);
-        return "exito!";
+    public CalendarioDeFeriados crearCalendario(@RequestBody CalendarioDeFeriados unCalendario) {
+        CalendarioDeFeriados calendarioActualizado=repo.save(unCalendario);
+        return calendarioActualizado;
 
     }
 
 
     @RequestMapping(value = Endpoints.CALENDARIOS, method = RequestMethod.GET)
-    public List<CalendarioDeFeriados> buscarCalendarios(@RequestParam(value = "nombre", defaultValue = "")
-                                                                String criterio) {
+    public List<CalendarioDeFeriados> buscarCalendarios(
+            @RequestParam(value = "nombre", defaultValue = "") String criterio) {
         return repo.findByNombreContainingIgnoreCase(criterio);
     }
 
 
     @RequestMapping(value = {Endpoints.CALENDARIOID}, method = RequestMethod.GET)
-    public CalendarioDeFeriados buscarCalendarioPorID(@PathVariable(value = "id") Long id) {
+    public CalendarioDeFeriados buscarCalendarioPorID(
+            @PathVariable(value = "id") Long id) {
         return repo.findOne(id);
     }
 
 
-    @RequestMapping(value = {Endpoints.CALENDARIOID}, method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public String actualizarCalendario(@PathVariable(value = "id") Long id, @RequestBody CalendarioDeFeriados unCalendario) {
+    @RequestMapping(value = {Endpoints.CALENDARIOID}, method = RequestMethod.PUT,
+            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public CalendarioDeFeriados actualizarCalendario(@PathVariable(value = "id") Long id,
+                                       @RequestBody CalendarioDeFeriados unCalendario) {
         CalendarioDeFeriados calendario = repo.findOne(id);
         calendario.setNombre(unCalendario.getNombre());
         calendario.setReglasDeFeriado(unCalendario.getReglasDeFeriado());
-        repo.save(calendario);
+        CalendarioDeFeriados calendarioActualizado=repo.save(calendario);
 
-        return "exito";
+        return calendarioActualizado;
     }
 
     @RequestMapping(value = {Endpoints.CALENDARIOID + "/feriados"},
@@ -82,16 +85,20 @@ public class CalendarioController {
         return repo.findOne(id).feriadosEntre(inicio, fin);
     }
 
-    @RequestMapping(value = {Endpoints.CALENDARIOID + "/reglas_de_feriado"}, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public String crearNuevaReglaDeFeriado(@PathVariable(value = "id") Long id, @RequestBody ReglaDeFeriado unaRegla) {
+    @RequestMapping(value = {Endpoints.CALENDARIOID + "/reglas_de_feriado"},
+            method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public CalendarioDeFeriados crearNuevaReglaDeFeriado(@PathVariable(value = "id") Long id, @RequestBody ReglaDeFeriado unaRegla) {
         CalendarioDeFeriados unCalendario = repo.findOne(id);
         unCalendario.agregarReglaDeFeriado(unaRegla);
-        repo.save(unCalendario);
-        return "exito!";
+       CalendarioDeFeriados calendarioActualizado= repo.save(unCalendario);
+        return calendarioActualizado;
     }
 
-    @RequestMapping(value = {Endpoints.CALENDARIOS + "/es_feriado"}, method = RequestMethod.GET)
-    public List<CalendarioDeFeriados> calendariosEnDondeEsFeriadoUnaFecha(@RequestParam(value = "fecha", defaultValue = "") String stringDia) {
+    @RequestMapping(value = {Endpoints.CALENDARIOS + "/es_feriado"},
+            method = RequestMethod.GET)
+    public List<CalendarioDeFeriados> calendariosEnDondeEsFeriadoUnaFecha(
+            @RequestParam(value = "fecha", defaultValue = "") String stringDia) {
         LocalDate dia;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
