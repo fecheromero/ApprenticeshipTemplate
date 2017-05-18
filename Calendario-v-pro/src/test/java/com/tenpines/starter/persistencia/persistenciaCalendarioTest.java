@@ -33,20 +33,20 @@ public class persistenciaCalendarioTest {
     public LocalDate anioNuevoDosMilDieciocho;
 
     @Autowired
-    protected RepositorioDeCalendarios PersistidorDeCalendarios;
+    protected RepositorioDeCalendarios repo;
 
     @Before
     public void setUp() {
-        PersistidorDeCalendarios.deleteAll();
+        repo.deleteAll();
     }
 
 
     @Test
     public void sePuedeGuardarUnCalendarioEnLaBaseYRecuperarlo() {
         CalendarioDeFeriados unCalendario = new CalendarioDeFeriados("un calendario");
-        PersistidorDeCalendarios.save(unCalendario);
+        repo.save(unCalendario);
 
-        Assert.assertEquals(1, PersistidorDeCalendarios.findAll().size());
+        Assert.assertEquals(1, repo.findAll().size());
     }
 
     @Test
@@ -54,8 +54,8 @@ public class persistenciaCalendarioTest {
         CalendarioDeFeriados unCalendario = new CalendarioDeFeriados("un calendario");
         lunesFeriado = new ReglaDeFeriadoDeDiaDeSemana(DayOfWeek.MONDAY);
         unCalendario.agregarReglaDeFeriado(lunesFeriado);
-        PersistidorDeCalendarios.save(unCalendario);
-        unCalendario = PersistidorDeCalendarios.findAll().get(0);
+        repo.save(unCalendario);
+        unCalendario = repo.findAll().get(0);
 
         Assert.assertTrue(unCalendario.esFeriado(LocalDate.of(2017, 05, 01)));
         Assert.assertFalse(unCalendario.esFeriado(LocalDate.of(2017,05,02)));
@@ -66,8 +66,8 @@ public class persistenciaCalendarioTest {
         CalendarioDeFeriados unCalendario = new CalendarioDeFeriados("un calendario");
         veinticincoDeMayo = new ReglaDeFeriadoDiaDeMes(MonthDay.of(5, 25));
         unCalendario.agregarReglaDeFeriado(veinticincoDeMayo);
-        PersistidorDeCalendarios.save(unCalendario);
-        unCalendario = PersistidorDeCalendarios.findAll().get(0);
+        repo.save(unCalendario);
+        unCalendario = repo.findAll().get(0);
 
         Assert.assertTrue(unCalendario.esFeriado(LocalDate.of(2017, 5, 25)));
         Assert.assertFalse(unCalendario.esFeriado(LocalDate.of(2017,05,02)));
@@ -83,8 +83,8 @@ public class persistenciaCalendarioTest {
         intervalo = new IntervaloDeTiempo(anioNuevoDosMilQuince, anioNuevoDosMilDieciocho);
         reglaIntervalo = new ReglaDeFeriadoConIntervalo(navidad, intervalo);
         unCalendario.agregarReglaDeFeriado(reglaIntervalo);
-        PersistidorDeCalendarios.save(unCalendario);
-        unCalendario = PersistidorDeCalendarios.findAll().get(0);
+        repo.save(unCalendario);
+        unCalendario = repo.findAll().get(0);
         Assert.assertTrue(unCalendario.esFeriado(LocalDate.of(2017, 12, 25)));
         Assert.assertFalse(unCalendario.esFeriado(LocalDate.of(2014,12,25)));
 
@@ -99,8 +99,8 @@ public class persistenciaCalendarioTest {
         intervalo = new IntervaloDeTiempo(anioNuevoDosMilQuince, anioNuevoDosMilDieciocho);
         reglaIntervalo = new ReglaDeFeriadoConIntervalo(lunesFeriado, intervalo);
         unCalendario.agregarReglaDeFeriado(reglaIntervalo);
-        PersistidorDeCalendarios.save(unCalendario);
-        unCalendario = PersistidorDeCalendarios.findAll().get(0);
+        repo.save(unCalendario);
+        unCalendario = repo.findAll().get(0);
 
         Assert.assertTrue(unCalendario.esFeriado(LocalDate.of(2017, 5, 8)));
         Assert.assertFalse(unCalendario.esFeriado(LocalDate.of(2014,6,30)));

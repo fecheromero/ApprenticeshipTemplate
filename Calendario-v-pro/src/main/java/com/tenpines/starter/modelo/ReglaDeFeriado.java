@@ -18,7 +18,7 @@ import java.time.LocalDate;
         @JsonSubTypes.Type(value = ReglaDeFeriadoConIntervalo.class),
         @JsonSubTypes.Type(value = ReglaDeFeriadoFecha.class),
         @JsonSubTypes.Type(value = ReglaDeFeriadoDiaDeMes.class),
-        @JsonSubTypes.Type(value = ReglaDeFeriadoDeDiaDeSemana  .class)
+        @JsonSubTypes.Type(value = ReglaDeFeriadoDeDiaDeSemana .class)
 })
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class  ReglaDeFeriado  {

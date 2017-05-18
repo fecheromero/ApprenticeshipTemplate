@@ -1,44 +1,47 @@
 package com.tenpines.starter.integracion;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.tenpines.starter.modelo.*;
 import com.tenpines.starter.repositorios.RepositorioDeCalendarios;
-import org.junit.After;
-import org.junit.Assert;
+import com.tenpines.starter.web.Endpoints;
 import org.junit.Before;
 import org.junit.Test;
-import org.skyscreamer.jsonassert.JSONAssert;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.Mockito;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.ResultActions;
 
-import java.lang.reflect.Type;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.MonthDay;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Created by fede on 15/05/17.
  */
 public class RestCalendarioTest extends RESTTestBase {
-    Gson gson = new Gson();
-    @Autowired
-    RepositorioDeCalendarios persistidorDeCalendarios;
+
+    @MockBean
+    RepositorioDeCalendarios repo;
+
     protected CalendarioDeFeriados unCalendario;
+    protected List<CalendarioDeFeriados> listaDeCalendarios;
 
     @Before
     public void setUp() {
-        unCalendario = new CalendarioDeFeriados("un calendario bonito");
+        unCalendario = new CalendarioDeFeriados("calendarioDeArgentina");
+        unCalendario.setId(new Long(17));
         unCalendario.agregarReglaDeFeriado(new ReglaDeFeriadoDeDiaDeSemana(DayOfWeek.MONDAY));
         unCalendario.agregarReglaDeFeriado(new ReglaDeFeriadoDiaDeMes(MonthDay.of(12, 22)));
         unCalendario.agregarReglaDeFeriado(new ReglaDeFeriadoFecha(LocalDate.of(2017, 5, 25)));
@@ -50,37 +53,87 @@ public class RestCalendarioTest extends RESTTestBase {
         unCalendario.agregarReglaDeFeriado(new ReglaDeFeriadoConIntervalo(
                 new ReglaDeFeriadoDiaDeMes(diaDelGato),
                 presidenciaDeMacri));
-        persistidorDeCalendarios.save(unCalendario);
+        listaDeCalendarios = Arrays.asList(unCalendario);
+        Mockito.reset(repo);
+
     }
 
-    @After
-    public void tearDown() {
-        persistidorDeCalendarios.deleteAll();
-    }
 
-    public String calendarioDeArgentina() {
-        return "[{\"id\":" + unCalendario.getId().toString() + ",\"reglasDeFeriado\":[{\"type\":\"com.tenpines.starter.modelo.ReglaDeFeriadoDeDiaDeSemana\",\"diaDeSemanaFeriado\":\"MONDAY\"},{\"type\":\"com.tenpines.starter.modelo.ReglaDeFeriadoDiaDeMes\",\"mes\":12,\"diaDeMes\":22,\"diaDeMesFeriado\":{\"month\":\"DECEMBER\",\"dayOfMonth\":22,\"monthValue\":12}},{\"type\":\"com.tenpines.starter.modelo.ReglaDeFeriadoFecha\",\"fecha\":{\"year\":2017,\"month\":\"MAY\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"},\"era\":\"CE\",\"dayOfYear\":145,\"leapYear\":false,\"dayOfWeek\":\"THURSDAY\",\"dayOfMonth\":25,\"monthValue\":5}},{\"type\":\"com.tenpines.starter.modelo.ReglaDeFeriadoConIntervalo\",\"intervalo\":{\"inicioIntervalo\":{\"year\":2015,\"month\":\"DECEMBER\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"},\"era\":\"CE\",\"dayOfYear\":344,\"leapYear\":false,\"dayOfWeek\":\"THURSDAY\",\"dayOfMonth\":10,\"monthValue\":12},\"finIntervalo\":{\"year\":2019,\"month\":\"DECEMBER\",\"chronology\":{\"calendarType\":\"iso8601\",\"id\":\"ISO\"},\"era\":\"CE\",\"dayOfYear\":344,\"leapYear\":false,\"dayOfWeek\":\"TUESDAY\",\"dayOfMonth\":10,\"monthValue\":12}},\"reglaDeFeriado\":{\"type\":\"com.tenpines.starter.modelo.ReglaDeFeriadoDiaDeMes\",\"mes\":2,\"diaDeMes\":20,\"diaDeMesFeriado\":{\"month\":\"FEBRUARY\",\"dayOfMonth\":20,\"monthValue\":2}}}],\"nombre\":\"un calendario bonito\"}]";
-    }
-
-    public String getObjetoYParseoAString(String url) throws Exception {
+    public ResultActions getJsonResultanteDeLaURL(String url) throws Exception {
         return mockClient.perform(get(url))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                .andReturn().getResponse().getContentAsString();
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE));
+
+    }
+
+    public ResultActions postJsonResultanteDeLaURL(String url,Object body) throws Exception {
+        return mockClient.perform(post(url).content(objectMapper.writeValueAsString(body)).contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+    }
+
+    public void asertarMensajeValor(ResultActions resultado, String mensaje, Object valor) throws Exception {
+        resultado
+                .andExpect(jsonPath("$" + mensaje).value(valor));
     }
 
     @Test
-    public void xxx() throws Exception {
+    public void testGetHome() throws Exception {
+
         mockClient.perform(get("/")).andDo(print()).andExpect(status().isOk())
                 .andExpect(content().string("hello Maggie!"));
     }
 
     @Test
     public void testGetCalendarios() throws Exception {
-        String jsonResultado = getObjetoYParseoAString("/calendarios");
+        given(repo.findByNombreContainingIgnoreCase("")).willReturn(
+                listaDeCalendarios
+        );
+        ResultActions resultado = getJsonResultanteDeLaURL(Endpoints.CALENDARIOS);
+        asertarMensajeValor(resultado, ".length()", 1);
+        asertarMensajeValor(resultado, "[0].nombre", "calendarioDeArgentina");
+    }
 
-        JSONAssert.assertEquals(calendarioDeArgentina(), jsonResultado, false);
+    @Test
+    public void testGetCalendarioConNombreTraeLosQueMatchean() throws Exception {
+        given(repo.findByNombreContainingIgnoreCase("Argentina")).willReturn(
+                listaDeCalendarios.stream().filter(calendarioDeFeriados -> calendarioDeFeriados.getNombre().contains("Argentina"))
+                        .collect(Collectors.toList())
+        );
+
+        ResultActions resultado = getJsonResultanteDeLaURL(Endpoints.CALENDARIOS+"?nombre=Argentina");
+        asertarMensajeValor(resultado, ".length()", 1);
+        asertarMensajeValor(resultado, "[0].nombre", "calendarioDeArgentina");
+    }
+
+    @Test
+    public void testGetCalendarioConNombreNoTraeNingunoSiNingunoMatchea() throws Exception {
+        given(repo.findByNombreContainingIgnoreCase("tutuca")).willReturn(
+                listaDeCalendarios.stream().filter(calendarioDeFeriados -> calendarioDeFeriados.getNombre().contains("tutuca"))
+                        .collect(Collectors.toList())
+        );
+        ResultActions resultado = getJsonResultanteDeLaURL(Endpoints.CALENDARIOS+"?nombre=tutuca");
+        asertarMensajeValor(resultado, ".length()", 0);
 
     }
+
+    @Test
+    public void testGetCalendarioPorId() throws Exception {
+        Long id = unCalendario.getId();
+        given(repo.findOne(id)).willReturn(unCalendario);
+        ResultActions resultado = getJsonResultanteDeLaURL(Endpoints.CALENDARIOS +"/"+ id.toString());
+        asertarMensajeValor(resultado, ".id", id.intValue());
+    }
+
+    @Test
+    public void testPostCalendario() throws Exception {
+        CalendarioDeFeriados unCalendarioMas = new CalendarioDeFeriados("unCalendarioMas");
+        ResultActions resultado=postJsonResultanteDeLaURL(Endpoints.CALENDARIOS,unCalendarioMas);
+        given(repo.save(unCalendarioMas)).willReturn(unCalendarioMas);
+        asertarMensajeValor(resultado,"","exito!");
+    }
+
+
 }
