@@ -37,16 +37,21 @@ public class RestCalendarioTest extends RESTTestBase {
     @Before
     public void setUp() {
         unCalendario = new CalendarioDeFeriados("calendarioDeArgentina");
-        unCalendario.agregarReglaDeFeriado(new ReglaDeFeriadoDeDiaDeSemana(DayOfWeek.MONDAY));
-        unCalendario.agregarReglaDeFeriado(new ReglaDeFeriadoDiaDeMes(MonthDay.of(12, 22)));
-        unCalendario.agregarReglaDeFeriado(new ReglaDeFeriadoFecha(LocalDate.of(2017, 5, 25)));
-        MonthDay diaDelGato = MonthDay.of(2, 20);
+        ReglaDeFeriadoDeDiaDeSemana reglaDeFeriadoLunes = new ReglaDeFeriadoDeDiaDeSemana(DayOfWeek.MONDAY);
+        ReglaDeFeriadoDiaDeMes reglaDeFeriadoCumpleañosDeFeche = new ReglaDeFeriadoDiaDeMes(MonthDay.of(12, 22));
+        ReglaDeFeriadoFecha reglaDeFeriado25Del5De2017 = new ReglaDeFeriadoFecha(LocalDate.of(2017, 5, 25));
+         MonthDay diaDelGato = MonthDay.of(2, 20);
         IntervaloDeTiempo presidenciaDeMacri = IntervaloDeTiempo.fromDateToDate(
                 LocalDate.of(2015, 12, 10),
                 LocalDate.of(2019, 12, 10)
         );
+        ReglaDeFeriadoDiaDeMes reglaDeFeriadoDiaDelGato = new ReglaDeFeriadoDiaDeMes(diaDelGato);
+
+        unCalendario.agregarReglaDeFeriado(reglaDeFeriado25Del5De2017);
+        unCalendario.agregarReglaDeFeriado(reglaDeFeriadoLunes);
+        unCalendario.agregarReglaDeFeriado(reglaDeFeriadoCumpleañosDeFeche);
         unCalendario.agregarReglaDeFeriado(new ReglaDeFeriadoConIntervalo(
-                new ReglaDeFeriadoDiaDeMes(diaDelGato),
+                reglaDeFeriadoDiaDelGato,
                 presidenciaDeMacri));
          repo.save(unCalendario);
     }
