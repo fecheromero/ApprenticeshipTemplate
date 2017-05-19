@@ -12,6 +12,7 @@ import java.time.MonthDay;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -64,24 +65,28 @@ public class CalendarioController {
     @RequestMapping(value = {Endpoints.CALENDARIOID + "/feriados"},
             method = RequestMethod.GET)
     public List<LocalDate> obtenerFeriados(@PathVariable(value = "id") Long id,
-                                           @RequestParam(value = "desde", defaultValue = "") String diaDesde,
-                                           @RequestParam(value = "hasta", defaultValue = "") String diaHasta) {
+                                           @RequestParam(value = "desde") String diaDesde,
+                                           @RequestParam(value = "hasta") String diaHasta) {
         LocalDate inicio;
         LocalDate fin;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        Optional<String> optDiaDesde= Optional.of(diaDesde);
+        Optional<String> optDiaHasta= Optional.of(diaHasta);
 
-        if (diaDesde.equals("")) {
+        inicio=optDiaDesde.map(dia ->LocalDate.parse(dia,formatter)).orElse(LocalDate.now().withMonth(1).withDayOfMonth(1));
+/*        if (diaDesde.equals("")) {
             inicio = LocalDate.now().withMonth(1).withDayOfMonth(1);
         } else {
             inicio = LocalDate.parse(diaDesde, formatter);
-        }
+        }*/
+        fin=optDiaHasta.map(dia ->LocalDate.parse(dia,formatter)).orElse(LocalDate.now().withMonth(12).withDayOfMonth(31));
 
 
-        if (diaHasta.equals("")) {
+      /*  if (diaHasta.equals("")) {
             fin = LocalDate.now().withMonth(12).withDayOfMonth(31);
         } else {
             fin = LocalDate.parse(diaHasta, formatter);
-        }
+        }*/
         return repo.findOne(id).feriadosEntre(inicio, fin);
     }
 
