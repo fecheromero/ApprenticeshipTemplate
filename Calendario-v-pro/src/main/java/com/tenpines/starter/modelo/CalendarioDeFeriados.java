@@ -17,10 +17,10 @@ import java.util.stream.Collectors;
 @Entity
 public class CalendarioDeFeriados {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     protected List<ReglaDeFeriado> reglasDeFeriado;
      protected String nombre;
         public Long getId(){return id;}

@@ -6,11 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.MonthDay;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,11 +18,6 @@ public class CalendarioController {
 
     @Autowired
     protected RepositorioDeCalendarios repo;
-
-    @RequestMapping(Endpoints.HOME)
-    String home() {
-        return "hello Maggie!";
-    }
 
     @RequestMapping(value = Endpoints.CALENDARIOS, method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -53,11 +45,10 @@ public class CalendarioController {
     @RequestMapping(value = {Endpoints.CALENDARIOID}, method = RequestMethod.PUT,
             consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public CalendarioDeFeriados actualizarCalendario(@PathVariable(value = "id") Long id,
-                                       @RequestBody CalendarioDeFeriados unCalendario) {
-        CalendarioDeFeriados calendario = repo.findOne(id);
-        calendario.setNombre(unCalendario.getNombre());
-        calendario.setReglasDeFeriado(unCalendario.getReglasDeFeriado());
-        CalendarioDeFeriados calendarioActualizado=repo.save(calendario);
+                                       @RequestBody CalendarioDeFeriados calendarioNuevo) {
+          calendarioNuevo.setId(id);
+        CalendarioDeFeriados calendarioActualizado=repo.save(calendarioNuevo);
+
 
         return calendarioActualizado;
     }

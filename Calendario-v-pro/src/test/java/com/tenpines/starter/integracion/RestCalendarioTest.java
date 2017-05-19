@@ -138,7 +138,6 @@ public class RestCalendarioTest extends RESTTestBase {
         asertarMensajeValor(resultado,jsonCon("nombre"),unCalendarioMas.getNombre());
     }
 
-
     @Test
     public void testGetFeriadosPorIdDeCalendarioEnUnIntervaloRetornaLaCantidadDeFeriadosEnEseIntervalo() throws Exception {
         Long id=unCalendario.getId();
