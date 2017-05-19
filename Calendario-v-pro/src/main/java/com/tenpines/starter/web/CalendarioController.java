@@ -65,28 +65,18 @@ public class CalendarioController {
     @RequestMapping(value = {Endpoints.CALENDARIOID + "/feriados"},
             method = RequestMethod.GET)
     public List<LocalDate> obtenerFeriados(@PathVariable(value = "id") Long id,
-                                           @RequestParam(value = "desde") String diaDesde,
-                                           @RequestParam(value = "hasta") String diaHasta) {
+                                           @RequestParam(value = "desde", required = false) String diaDesde,
+                                           @RequestParam(value = "hasta",required = false) String diaHasta) {
         LocalDate inicio;
         LocalDate fin;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        Optional<String> optDiaDesde= Optional.of(diaDesde);
-        Optional<String> optDiaHasta= Optional.of(diaHasta);
+        Optional<String> optDiaDesde= Optional.ofNullable(diaDesde);
+        Optional<String> optDiaHasta= Optional.ofNullable(diaHasta);
 
         inicio=optDiaDesde.map(dia ->LocalDate.parse(dia,formatter)).orElse(LocalDate.now().withMonth(1).withDayOfMonth(1));
-/*        if (diaDesde.equals("")) {
-            inicio = LocalDate.now().withMonth(1).withDayOfMonth(1);
-        } else {
-            inicio = LocalDate.parse(diaDesde, formatter);
-        }*/
         fin=optDiaHasta.map(dia ->LocalDate.parse(dia,formatter)).orElse(LocalDate.now().withMonth(12).withDayOfMonth(31));
 
 
-      /*  if (diaHasta.equals("")) {
-            fin = LocalDate.now().withMonth(12).withDayOfMonth(31);
-        } else {
-            fin = LocalDate.parse(diaHasta, formatter);
-        }*/
         return repo.findOne(id).feriadosEntre(inicio, fin);
     }
 
@@ -103,15 +93,11 @@ public class CalendarioController {
     @RequestMapping(value = {Endpoints.CALENDARIOS + "/es_feriado"},
             method = RequestMethod.GET)
     public List<CalendarioDeFeriados> calendariosEnDondeEsFeriadoUnaFecha(
-            @RequestParam(value = "fecha", defaultValue = "") String stringDia) {
+            @RequestParam(value = "fecha", required = false) String stringDia) {
         LocalDate dia;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-        if (stringDia.equals("")) {
-            dia = LocalDate.now();
-        } else {
-            dia = LocalDate.parse(stringDia, formatter);
-        }
+        Optional<String> optDia=Optional.ofNullable(stringDia);
+        dia=optDia.map(sDia ->LocalDate.parse(sDia,formatter)).orElse(LocalDate.now());
         return repo.findAll().stream().filter(calendarioDeFeriados -> calendarioDeFeriados.esFeriado(dia)).collect(Collectors.toList());
     }
 }

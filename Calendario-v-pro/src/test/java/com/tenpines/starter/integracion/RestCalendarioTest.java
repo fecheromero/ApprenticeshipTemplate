@@ -14,6 +14,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.MonthDay;
+import java.util.List;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -98,8 +100,9 @@ public class RestCalendarioTest extends RESTTestBase {
     public void testGetCalendarioConNombreTraeLosQueMatchean() throws Exception {
 
         ResultActions resultado = getJsonResultanteDeLaURL(Endpoints.CALENDARIOS + "?nombre=Argentina");
-        asertarMensajeValor(resultado, tamañoDeJsonArray(),repo.findByNombreContainingIgnoreCase("Argentina").size());
-        asertarMensajeValor(resultado, primerElementoDeJsonArray()+jsonCon("nombre"), "calendarioDeArgentina");
+        List<CalendarioDeFeriados> listaDeResultados=repo.findByNombreContainingIgnoreCase("Argentina");
+        asertarMensajeValor(resultado, tamañoDeJsonArray(),listaDeResultados.size());
+        asertarMensajeValor(resultado, primerElementoDeJsonArray()+jsonCon("nombre"), listaDeResultados.get(0).getNombre());
     }
 
 
@@ -127,7 +130,7 @@ public class RestCalendarioTest extends RESTTestBase {
         asertarMensajeValor(resultado,jsonCon("nombre"),"calendarioDeArgentina");
         asertarPutConResultadoOk(Endpoints.CALENDARIOS+"/"+id,unCalendarioMas);
         resultado=getJsonResultanteDeLaURL(Endpoints.CALENDARIOS+"/"+id);
-        asertarMensajeValor(resultado,jsonCon("nombre"),"nombreNuevo");
+        asertarMensajeValor(resultado,jsonCon("nombre"),unCalendarioMas.getNombre());
     }
 
 
