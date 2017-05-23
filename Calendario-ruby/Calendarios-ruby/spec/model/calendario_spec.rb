@@ -6,7 +6,7 @@ describe 'Calendario de Feriados' do
 
   it 'test01: un dia de semana puede ser feriado' do
     un_sabado = Date.new(2017, 4, 29)
-    calendario_de_feriados.agregar_regla_de_feriado(ReglaDeFeriadoDiaDeSemana.new(un_sabado.cwday))
+    calendario_de_feriados.agregar_regla_de_feriado(ReglaDeFeriadoDeDiaDeSemana.new(dia_de_semana: un_sabado.cwday))
     expect(calendario_de_feriados.es_feriado? un_sabado).to be_truthy
   end
 
@@ -18,23 +18,23 @@ describe 'Calendario de Feriados' do
   it 'test03: mas de un dia de semana puede ser feriado' do
     un_sabado = Date.new(2017, 5, 6)
     un_domingo = Date.new(2017, 5, 7)
-    calendario_de_feriados.agregar_regla_de_feriado(ReglaDeFeriadoDiaDeSemana.new(un_sabado.cwday))
-    calendario_de_feriados.agregar_regla_de_feriado(ReglaDeFeriadoDiaDeSemana.new(un_domingo.cwday))
+    calendario_de_feriados.agregar_regla_de_feriado(ReglaDeFeriadoDeDiaDeSemana.new(dia_de_semana:un_sabado.cwday))
+    calendario_de_feriados.agregar_regla_de_feriado(ReglaDeFeriadoDeDiaDeSemana.new(dia_de_semana:un_domingo.cwday))
     expect(calendario_de_feriados.es_feriado? un_sabado).to be_truthy
     expect(calendario_de_feriados.es_feriado? un_domingo).to be_truthy
   end
 
   it 'test04: un dia de mes puede ser feriado' do
     un_primero_de_mayo = Date.new(2017, 5, 1)
-    calendario_de_feriados.agregar_regla_de_feriado(ReglaDeFeriadoDiaDeMes.new(5, 1))
+    calendario_de_feriados.agregar_regla_de_feriado(ReglaDeFeriadoDeDiaDeMes.new(mes:5,dia_de_mes:1))
     expect(calendario_de_feriados.es_feriado? un_primero_de_mayo).to be_truthy
   end
 
   it 'test05: mas de un dia de mes puede ser feriado' do
     un_primero_de_mayo = Date.new(2017, 5, 1)
     un_25_de_mayo = Date.new(2017, 5, 25)
-    calendario_de_feriados.agregar_regla_de_feriado(ReglaDeFeriadoDiaDeMes.new(5, 1))
-    calendario_de_feriados.agregar_regla_de_feriado(ReglaDeFeriadoDiaDeMes.new(5, 25))
+    calendario_de_feriados.agregar_regla_de_feriado(ReglaDeFeriadoDeDiaDeMes.new(mes:5,dia_de_mes: 1))
+    calendario_de_feriados.agregar_regla_de_feriado(ReglaDeFeriadoDeDiaDeMes.new(mes:5,dia_de_mes: 25))
     expect(calendario_de_feriados.es_feriado? un_primero_de_mayo).to be_truthy
     expect(calendario_de_feriados.es_feriado? un_25_de_mayo).to be_truthy
   end
@@ -46,15 +46,15 @@ describe 'Calendario de Feriados' do
 
   it 'test07: una fecha puede ser feriado' do
     cumpleaños_de_eze = Date.new(2017, 10, 16)
-    calendario_de_feriados.agregar_regla_de_feriado(ReglaDeFeriadoFecha.new(cumpleaños_de_eze))
+    calendario_de_feriados.agregar_regla_de_feriado(ReglaDeFeriadoFecha.new(fecha:cumpleaños_de_eze))
     expect(calendario_de_feriados.es_feriado? cumpleaños_de_eze).to be_truthy
   end
 
   it 'test08: mas de una fecha puede ser feriado' do
     cumpleaños_de_eze = Date.new(2017, 10, 16)
     cumpleaños_de_feche = Date.new(2017, 12, 22)
-    calendario_de_feriados.agregar_regla_de_feriado(ReglaDeFeriadoFecha.new(cumpleaños_de_eze))
-    calendario_de_feriados.agregar_regla_de_feriado(ReglaDeFeriadoFecha.new(cumpleaños_de_feche))
+    calendario_de_feriados.agregar_regla_de_feriado(ReglaDeFeriadoFecha.new(fecha:cumpleaños_de_eze))
+    calendario_de_feriados.agregar_regla_de_feriado(ReglaDeFeriadoFecha.new(fecha:cumpleaños_de_feche))
     expect(calendario_de_feriados.es_feriado? cumpleaños_de_eze).to be_truthy
     expect(calendario_de_feriados.es_feriado? cumpleaños_de_feche).to be_truthy
   end
@@ -69,8 +69,10 @@ describe 'Calendario de Feriados' do
     inicio = Date.new(2015, 10, 12)
     fin = Date.new(2019, 10, 12)
     periodo = Range.new(inicio, fin)
-    calendario_de_feriados.agregar_regla_de_feriado(ReglaDeFeriadoConPeriodo.new(
-        ReglaDeFeriadoDiaDeSemana.new(un_sabado.cwday), periodo))
+    una_regla_con_periodo=ReglaDeFeriadoConPeriodo.new(
+        regla: ReglaDeFeriadoDeDiaDeSemana.new(dia_de_semana:un_sabado.cwday))
+    una_regla_con_periodo.periodo=periodo
+    calendario_de_feriados.agregar_regla_de_feriado(una_regla_con_periodo)
     expect(calendario_de_feriados.es_feriado? un_sabado).to be_truthy
   end
 
@@ -79,8 +81,9 @@ describe 'Calendario de Feriados' do
     inicio = Date.new(2015, 10, 12)
     fin = Date.new(2019, 10, 12)
     periodo = Range.new(inicio, fin)
-    calendario_de_feriados.agregar_regla_de_feriado(ReglaDeFeriadoConPeriodo.new(
-        ReglaDeFeriadoDiaDeSemana.new(un_sabado_fuera_del_periodo.cwday), periodo))
+    una_regla_con_periodo=ReglaDeFeriadoConPeriodo.new(
+        regla:ReglaDeFeriadoDeDiaDeSemana.new(dia_de_semana:un_sabado_fuera_del_periodo.cwday))
+    una_regla_con_periodo.periodo=periodo
     expect(calendario_de_feriados.es_feriado? un_sabado_fuera_del_periodo).to be_falsey
   end
 
@@ -89,8 +92,10 @@ describe 'Calendario de Feriados' do
     inicio = Date.new(2015, 10, 12)
     fin = Date.new(2019, 10, 12)
     periodo = Range.new(inicio, fin)
-    calendario_de_feriados.agregar_regla_de_feriado(ReglaDeFeriadoConPeriodo.new(
-        ReglaDeFeriadoDiaDeMes.new(10, 16), periodo))
+    una_regla_de_feriado_con_periodo=ReglaDeFeriadoConPeriodo.new(
+        regla:ReglaDeFeriadoDeDiaDeMes.new(mes:10,dia_de_mes: 16))
+    una_regla_de_feriado_con_periodo.periodo=periodo
+    calendario_de_feriados.agregar_regla_de_feriado(una_regla_de_feriado_con_periodo)
     expect(calendario_de_feriados.es_feriado? cumpleaños_de_eze).to be_truthy
   end
 
@@ -99,8 +104,10 @@ describe 'Calendario de Feriados' do
     inicio = Date.new(2015, 10, 12)
     fin = Date.new(2019, 10, 12)
     periodo = Range.new(inicio, fin)
-    calendario_de_feriados.agregar_regla_de_feriado(ReglaDeFeriadoConPeriodo.new(
-        ReglaDeFeriadoDiaDeMes.new(10, 16), periodo))
+    una_regla_de_feriado_con_periodo=ReglaDeFeriadoConPeriodo.new(
+        regla:ReglaDeFeriadoDeDiaDeMes.new(mes:10,dia_de_mes: 16))
+    una_regla_de_feriado_con_periodo.periodo=periodo
+    calendario_de_feriados.agregar_regla_de_feriado una_regla_de_feriado_con_periodo
     expect(calendario_de_feriados.es_feriado? un_cumpleaños_de_eze_fuera_del_periodo).to be_falsey
   end
 

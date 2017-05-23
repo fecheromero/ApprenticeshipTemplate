@@ -1,9 +1,7 @@
-class ReglaDeFeriadoDeDiaDeMes < ReglaDeFeriado
+class ReglaDeFeriadoDeDiaDeMes < ApplicationRecord
 
-  has_many :regla_de_feriado, as: :regla
-  has_one :regla_de_feriado_con_periodo, as: :regla_de_feriado
-
-
+  has_one :regla_de_feriado_con_periodo, as: :regla
+  has_one :wrapper_de_regla_de_feriado, as: :regla
   def es_feriado?(una_fecha)
     (self.mes.eql? una_fecha.month) && (self.dia_de_mes.eql? una_fecha.day)
   end
