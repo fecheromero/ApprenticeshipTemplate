@@ -15,6 +15,10 @@ class CalendarioDeFeriado < ApplicationRecord
     unWrapperDeReglaDeFeriado=WrapperDeReglaDeFeriado.new
     unWrapperDeReglaDeFeriado.regla=una_regla
     self.reglas<< unWrapperDeReglaDeFeriado
+    save!
+  end
+  def feriados_entre(fecha_desde,fecha_hasta)
+    Range.new(fecha_desde,fecha_hasta).to_a.select{|unaFecha| es_feriado?unaFecha}
   end
 end
 
