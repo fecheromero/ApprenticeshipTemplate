@@ -1,4 +1,7 @@
 class CalendarioDeFeriadoSerializer < ActiveModel::Serializer
-  attributes :id,:nombre
-  has_many :reglas
+  attributes :id,:nombre, :reglas
+
+  def reglas
+    object.reglas_de_feriado
+  end
 end

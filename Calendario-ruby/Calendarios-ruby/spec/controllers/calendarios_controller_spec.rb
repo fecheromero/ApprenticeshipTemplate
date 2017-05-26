@@ -1,16 +1,22 @@
 require 'rails_helper'
 
-def json_response
-  (JSON.parse response.body)
-end
 
 describe CalendariosController, type: :controller do
-
+  let(:unaFecha){Date.new(2017,5,13)}
   let(:calendarioDeArgentina){CalendarioDeFeriado.new(nombre:'Argentina')}
   let(:calendarioDeChile){CalendarioDeFeriado.new(nombre:'Chile')}
-  let(:reglaDeFeriadoFecha){ReglaDeFeriadoFecha.new(fecha: Date.today)}
+  let(:reglaDeFeriadoFecha){ReglaDeFeriadoFecha.new(fecha: unaFecha)}
   let(:reglaDeFeriadoDeDiaDeMes){ReglaDeFeriadoDeDiaDeMes.new(mes: 12, dia_de_mes: 22)}
   let(:reglaDeFeriadoDeDiaDeSemana){ReglaDeFeriadoDeDiaDeSemana.new(dia_de_semana: 7)}
+
+  def json_response
+    (JSON.parse response.body)
+  end
+
+  def expectJsonIgualACalendario jsonCalendario,calendario
+    expect(jsonCalendario['id']).to be(calendario.id)
+    expect(jsonCalendario['nombre']).to eq(calendario.nombre)
+  end
 
   it 'test get /calendarios trae todos los calendarios' do
      get :buscar_calendarios
@@ -18,7 +24,7 @@ describe CalendariosController, type: :controller do
     calendarioDeArgentina.save
     get :buscar_calendarios
     expect(response).to have_http_status :ok
-    expect(json_response[0]['id']).to be(calendarioDeArgentina.id)
+     expectJsonIgualACalendario(json_response[0], calendarioDeArgentina)
     expect(json_response.count).to be(cantidadDeCalendariosAntesDelSave+1)
   end
 
@@ -31,7 +37,7 @@ describe CalendariosController, type: :controller do
     calendarioDeChile.save!
     get :buscar_calendarios,  {params: {nombre: 'Argentina'}}
     expect(response).to have_http_status :ok
-    expect(json_response[0]['id']).to be(calendarioDeArgentina.id)
+    expectJsonIgualACalendario(json_response[0], calendarioDeArgentina)
     expect(json_response.count).to be(cantidadDeCalendariosAntesDelSave+1)
   end
 
@@ -40,38 +46,46 @@ describe CalendariosController, type: :controller do
     calendarioDeArgentina.save!
     get :buscar_calendario, params: {id: calendarioDeArgentina.id}
     expect(response).to have_http_status :ok
-    expect(json_response['id']).to be(calendarioDeArgentina.id)
+    expectJsonIgualACalendario(json_response, calendarioDeArgentina)
   end
   #TODO CALENDARIO QUE NO EXISTE
+
+
   it 'test post /calendarios crea un calendario' do
     cantidadDeCalendariosPrevioAlPost=CalendarioDeFeriado.count
     post :crear_calendario, params: {nombre:'Argentina',reglas:[]}
     expect(CalendarioDeFeriado.count).to eq(cantidadDeCalendariosPrevioAlPost+1)
+    expect((CalendarioDeFeriado.find_by_nombre 'Argentina').reglas_de_feriado.count).to be(0)
+    expect(CalendarioDeFeriado.all.any?{|calendario| calendario.nombre.eql? 'Argentina'})
   end
-  #TODO en ves de mostrar reglas mostrar reglas_de_feriado (ver si puedo jsonizar la respuesta al metodo)
+
   it 'test put /calendarios/id modificar un calendario existente' do
-    unasReglasJsoneadas=[ActiveModelSerializers::SerializableResource.new(reglaDeFeriadoDeDiaDeMes).to_json]
+    unasReglasJsoneadas=[ActiveModelSerializers::SerializableResource.new(reglaDeFeriadoDeDiaDeMes).as_json]
     calendarioDeArgentina.save!
     id=calendarioDeArgentina.id
-    #cantidadDeCalendariosPrevioAlPut=CalendarioDeFeriado.count
     expect {
-      put :modificar_calendario, params: {id: id, nombre: 'calendario de argentina modificado', reglas: unasReglasJsoneadas}
-      #expect(CalendarioDeFeriado.count).to eq(cantidadDeCalendariosPrevioAlPut)
+      put :modificar_calendario,
+          params: {id: id, nombre: 'calendario de argentina modificado', reglas: unasReglasJsoneadas}
     }.not_to change(CalendarioDeFeriado, :count)
 
     calendarioDeArgentina.reload
     expect(calendarioDeArgentina.reglas_de_feriado.count).to eq(unasReglasJsoneadas.count)
+
+    expect(calendarioDeArgentina.reglas_de_feriado.any? {
+        |regla| (regla.is_a? ReglaDeFeriadoDeDiaDeMes) &&
+                                (regla.mes==reglaDeFeriadoDeDiaDeMes.mes) &&
+                                (regla.dia_de_mes==reglaDeFeriadoDeDiaDeMes.dia_de_mes)  }).to be_truthy
   end
 
 
   it 'test get /calendarios/id/feriados?desde= & hasta= retorna los feriados entre esas 2 fechas para ese calendario'do
-    unasReglasJsoneadas=[ActiveModelSerializers::SerializableResource.new(reglaDeFeriadoDeDiaDeSemana).to_json]
       calendarioDeArgentina.agregar_regla_de_feriado reglaDeFeriadoDeDiaDeSemana
       calendarioDeArgentina.save!
       cantidadDeFeriadosEntreEl1DeEneroYEl1DeMayo=calendarioDeArgentina.feriados_entre(Date.new(2017,1,1),Date.new(2017,5,1)).to_a.count
       get :obtener_feriados, params: {id: calendarioDeArgentina.id, desde: '1/1/2017', hasta: '1/5/2017'}
        expect(response).to have_http_status :ok                                                                         
        expect(json_response.count).to be(cantidadDeFeriadosEntreEl1DeEneroYEl1DeMayo)
+      expect(json_response.all? { |jsonDia| calendarioDeArgentina.es_feriado? Date.strptime(jsonDia,'%Y-%m-%d')}).to be_truthy
   end
 
 
@@ -86,31 +100,35 @@ describe CalendariosController, type: :controller do
     expect(response).to have_http_status :ok
     expect(json_response.count).to be(cantidadDeDomingosEntre1DeEneroY1deMayo)
   end
+
   it 'test get /calendarios/id/reglas_de_feriado agrega una regla'do
     calendarioDeArgentina.agregar_regla_de_feriado reglaDeFeriadoFecha
     calendarioDeArgentina.save!
     cantidadDeReglasAntesDelPost=calendarioDeArgentina.reglas_de_feriado.count
     post :agregar_regla, body: reglaDeFeriadoDeDiaDeMes.as_json,params: {id:calendarioDeArgentina.id}
     calendarioDeArgentina.reload
-    expect(calendarioDeArgentina.reglas_de_feriado.count).to be(cantidadDeReglasAntesDelPost+1)
+    reglas_de_feriado = calendarioDeArgentina.reglas_de_feriado
+    expect(reglas_de_feriado.count).to be(cantidadDeReglasAntesDelPost+1)
+    expect(reglas_de_feriado.any? { |regla| (regla.is_a? ReglaDeFeriadoDeDiaDeMes) &&
+                                              regla.mes==reglaDeFeriadoDeDiaDeMes.mes &&
+                                              regla.dia_de_mes==reglaDeFeriadoDeDiaDeMes.dia_de_mes}).to be_truthy
   end
-  #before :each do
-   # algo(pepe)
-  #end
 
-#  let(:pepe) { "a" }
+  it 'test get /calendarios/es_feriado? con una fecha retorna los calendarios donde esa fecha es feriado'do
+    calendarioDeArgentina.agregar_regla_de_feriado reglaDeFeriadoFecha
+    calendarioDeArgentina.save!
+    calendarioDeChile.save!
+    post :calendarios_donde_es_feriado?, params: {fecha:'13/05/2017'}
+    expect(json_response.count).to be(1)
+    expectJsonIgualACalendario(json_response[0],calendarioDeArgentina)
+  end
 
-#  context '' do
+  it 'test get /calendarios/es_feriado? sin una fecha retorna los calendarios donde hoy es feriado'do
+    calendarioDeArgentina.agregar_regla_de_feriado reglaDeFeriadoFecha
+    calendarioDeArgentina.save!
+    calendarioDeChile.save!
+    post :calendarios_donde_es_feriado?
+    expect(json_response.count).to be(0)
+  end
 
-#    let(:pepe) { "b" }
-
-#    before :each do
-
- #   end
-
-#    it '' do
-
-#    end
-
- # end
 end
