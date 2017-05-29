@@ -1,6 +1,15 @@
 class CalendariosController < ApplicationController
 
 
+  def if_nil?(valor,default,&action)
+    if(valor.nil?)
+      return default
+    else
+      action.call valor
+    end
+
+  end
+
   #get /calendarios
   def buscar_calendarios
     criterio=params[:nombre]
@@ -23,7 +32,7 @@ class CalendariosController < ApplicationController
     nombre=params[:nombre]
     jsonArray=params[:reglasDeFeriado]||= []
     reglas=jsonArray.map { |regla|
-      ReglasDeFeriadoDeserializer.hashDeserialize (regla)
+      ReglasDeFeriadoDeserializer.deserialize (regla)
     }
         nuevoCalendario=CalendarioDeFeriado.new(nombre: nombre)
     reglas.each { |regla| nuevoCalendario.agregar_regla_de_feriado regla }
@@ -36,7 +45,7 @@ class CalendariosController < ApplicationController
     id=params[:id]
     nombre=params[:nombre]
     reglas=params[:reglasDeFeriado].map { |regla|
-      ReglasDeFeriadoDeserializer.hashDeserialize ( regla)
+      ReglasDeFeriadoDeserializer.deserialize( regla)
                                 }
     calendarioAModificar=CalendarioDeFeriado.find(id)
     reglas.each { |regla| calendarioAModificar.agregar_regla_de_feriado regla }
@@ -48,18 +57,9 @@ class CalendariosController < ApplicationController
   def obtener_feriados
     id=params[:id]
     calendario=CalendarioDeFeriado.find id
-    fechaDesde=params[:desde]
-    fechaHasta=params[:hasta]
-    if(fechaDesde.nil?)
-      fechaDesde= Date.new(Date.today.year,1,1)
-    else
-      fechaDesde=Date.strptime(fechaDesde,'%d/%m/%Y')
-    end
-    if(fechaHasta.nil?)
-      fechaHasta=Date.new(Date.today.year,12,31)
-    else
-      fechaHasta=Date.strptime(fechaHasta,'%d/%m/%Y')
-    end
+    fechaDesde=if_nil?(params[:desde],Date.new(Date.today.year,1,1)){|stringFecha| Date.strptime(stringFecha,'%d/%m/%Y')}
+    fechaHasta=if_nil?(params[:hasta],Date.new(Date.today.year,12,31)){|stringFecha| Date.strptime(stringFecha,'%d/%m/%Y')}
+
     render json: calendario.feriados_entre(fechaDesde,fechaHasta)
   end
 
@@ -68,7 +68,7 @@ class CalendariosController < ApplicationController
   def agregar_regla
     id=params[:id]
     calendario=CalendarioDeFeriado.find id
-    regla=ReglasDeFeriadoDeserializer.hashDeserialize params
+    regla=ReglasDeFeriadoDeserializer.deserialize params
     calendario.agregar_regla_de_feriado(regla)
     render json: regla
   end
@@ -76,18 +76,10 @@ class CalendariosController < ApplicationController
 
   #GET /calendarios/es_feriado?fecha=unaFecha
   def calendarios_donde_es_feriado?
-    fecha=params[:fecha]
-    if(fecha.nil?)
-      fecha=Date.today
-    else
-      fecha=Date.strptime(fecha,'%d/%m/%Y')
-    end
+    fecha=if_nil?(params[:fecha],Date.today){|stringFecha| Date.strptime(stringFecha,'%d/%m/%Y')}
+
     render json:CalendarioDeFeriado.all.select{|calendario| calendario.es_feriado? fecha}
   end
 
-  def calendar_params
-    params.permit(:name,
-                  :holiday_rules => [:type, :day_of_week])
-  end
 
 end
