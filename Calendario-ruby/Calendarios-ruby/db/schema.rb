@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170523193412) do
+ActiveRecord::Schema.define(version: 20170529164709) do
 
   create_table "calendario_de_feriados", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(version: 20170523193412) do
     t.string "nombre"
   end
 
-  create_table "regla_de_feriado_con_periodos", force: :cascade do |t|
+  create_table "regla_de_feriado_con_intervalos", force: :cascade do |t|
     t.date "inicio"
     t.date "fin"
     t.integer "calendario_de_feriado_id"

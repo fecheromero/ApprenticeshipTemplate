@@ -1,4 +1,4 @@
 class ReglaDeFeriadoFechaSerializer < ActiveModel::Serializer
-  attributes :id, :fecha
+  attributes  :fecha
 
 end

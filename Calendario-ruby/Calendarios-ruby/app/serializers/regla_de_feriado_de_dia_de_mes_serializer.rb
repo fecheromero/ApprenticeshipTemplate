@@ -1,3 +1,7 @@
 class ReglaDeFeriadoDeDiaDeMesSerializer < ActiveModel::Serializer
-  attributes :id,:dia_de_mes,:mes
+  attributes :diaDeMes,:mes
+
+  def diaDeMes
+    object.dia_de_mes
+  end
 end

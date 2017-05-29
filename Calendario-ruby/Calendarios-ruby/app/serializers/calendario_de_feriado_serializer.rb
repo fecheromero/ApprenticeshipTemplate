@@ -1,7 +1,8 @@
 class CalendarioDeFeriadoSerializer < ActiveModel::Serializer
-  attributes :id,:nombre, :reglas
+  attributes :id,:nombre, :reglasDeFeriado
 
-  def reglas
-    object.reglas_de_feriado
+  def reglasDeFeriado
+    object.reglas_de_feriado.map { |regla|
+      ActiveModelSerializers::SerializableResource.new(regla).as_json}
   end
 end

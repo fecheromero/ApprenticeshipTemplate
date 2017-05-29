@@ -5,13 +5,13 @@ describe 'persistencia de calendarios' do
   it 'se puede relacionar una regla de feriado con periodo con otra regla'do
         unaReglaDeFeriadoFecha=ReglaDeFeriadoFecha.new
         unaReglaDeFeriadoFecha.fecha=Date.new(2017,12,22)
-        unaReglaDeFeriadoConPeriodo=ReglaDeFeriadoConPeriodo.new
+        unaReglaDeFeriadoConPeriodo=ReglaDeFeriadoConIntervalo.new
         unaReglaDeFeriadoConPeriodo.regla=unaReglaDeFeriadoFecha
         unaReglaDeFeriadoConPeriodo.periodo=Range.new(Date.new(2015,1,1),Date.new(2017,1,1))
         unaReglaDeFeriadoConPeriodo.save
         expect(ReglaDeFeriadoFecha.all.empty?).to be_falsey
         expect(unaReglaDeFeriadoConPeriodo.regla).to be(unaReglaDeFeriadoFecha)
-        expect(ReglaDeFeriadoConPeriodo.all.empty?).to be_falsey
+        expect(ReglaDeFeriadoConIntervalo.all.empty?).to be_falsey
 
     end
 

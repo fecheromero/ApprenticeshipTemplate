@@ -69,7 +69,7 @@ describe 'Calendario de Feriados' do
     inicio = Date.new(2015, 10, 12)
     fin = Date.new(2019, 10, 12)
     periodo = Range.new(inicio, fin)
-    una_regla_con_periodo=ReglaDeFeriadoConPeriodo.new(
+    una_regla_con_periodo=ReglaDeFeriadoConIntervalo.new(
         regla: ReglaDeFeriadoDeDiaDeSemana.new(dia_de_semana:un_sabado.cwday))
     una_regla_con_periodo.periodo=periodo
     calendario_de_feriados.agregar_regla_de_feriado(una_regla_con_periodo)
@@ -81,7 +81,7 @@ describe 'Calendario de Feriados' do
     inicio = Date.new(2015, 10, 12)
     fin = Date.new(2019, 10, 12)
     periodo = Range.new(inicio, fin)
-    una_regla_con_periodo=ReglaDeFeriadoConPeriodo.new(
+    una_regla_con_periodo=ReglaDeFeriadoConIntervalo.new(
         regla:ReglaDeFeriadoDeDiaDeSemana.new(dia_de_semana:un_sabado_fuera_del_periodo.cwday))
     una_regla_con_periodo.periodo=periodo
     expect(calendario_de_feriados.es_feriado? un_sabado_fuera_del_periodo).to be_falsey
@@ -92,7 +92,7 @@ describe 'Calendario de Feriados' do
     inicio = Date.new(2015, 10, 12)
     fin = Date.new(2019, 10, 12)
     periodo = Range.new(inicio, fin)
-    una_regla_de_feriado_con_periodo=ReglaDeFeriadoConPeriodo.new(
+    una_regla_de_feriado_con_periodo=ReglaDeFeriadoConIntervalo.new(
         regla:ReglaDeFeriadoDeDiaDeMes.new(mes:10,dia_de_mes: 16))
     una_regla_de_feriado_con_periodo.periodo=periodo
     calendario_de_feriados.agregar_regla_de_feriado(una_regla_de_feriado_con_periodo)
@@ -104,7 +104,7 @@ describe 'Calendario de Feriados' do
     inicio = Date.new(2015, 10, 12)
     fin = Date.new(2019, 10, 12)
     periodo = Range.new(inicio, fin)
-    una_regla_de_feriado_con_periodo=ReglaDeFeriadoConPeriodo.new(
+    una_regla_de_feriado_con_periodo=ReglaDeFeriadoConIntervalo.new(
         regla:ReglaDeFeriadoDeDiaDeMes.new(mes:10,dia_de_mes: 16))
     una_regla_de_feriado_con_periodo.periodo=periodo
     calendario_de_feriados.agregar_regla_de_feriado una_regla_de_feriado_con_periodo

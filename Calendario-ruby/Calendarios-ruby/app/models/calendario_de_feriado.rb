@@ -1,6 +1,6 @@
 class CalendarioDeFeriado < ApplicationRecord
 
-  has_many :reglas_de_feriado_con_periodo, class_name: "ReglaDeFeriadoConPeriodo"
+  has_many :reglas_de_feriado_con_periodo, class_name: "ReglaDeFeriadoConIntervalo"
   has_many :reglas_de_feriado_de_dia_de_mes, class_name: "ReglaDeFeriadoDeDiaDeMes"
   has_many :reglas_de_feriado_de_dia_de_semana, class_name: "ReglaDeFeriadoDeDiaDeSemana"
   has_many :reglas_de_feriado_fecha, class_name: "ReglaDeFeriadoFecha"
