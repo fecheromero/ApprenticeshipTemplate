@@ -1,7 +1,7 @@
 class ReglaDeFeriadoConPeriodo < ApplicationRecord
 
-  has_one :wrapper_de_regla_de_feriado, as: :regla
   belongs_to :regla, polymorphic:true
+  belongs_to :calendario_de_feriado, optional: true
   def periodo
     return Range.new(self.inicio,self.fin)
   end

@@ -66,11 +66,11 @@ describe CalendariosController, type: :controller do
     expect {
       put :modificar_calendario,
           params: {id: id, nombre: 'calendario de argentina modificado', reglas: unasReglasJsoneadas}
-    }.not_to change(CalendarioDeFeriado, :count)
+    }.not_to change{ CalendarioDeFeriado.count }
 
     calendarioDeArgentina.reload
     expect(calendarioDeArgentina.reglas_de_feriado.count).to eq(unasReglasJsoneadas.count)
-
+    ##
     expect(calendarioDeArgentina.reglas_de_feriado.any? {
         |regla| (regla.is_a? ReglaDeFeriadoDeDiaDeMes) &&
                                 (regla.mes==reglaDeFeriadoDeDiaDeMes.mes) &&

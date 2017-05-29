@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 20170523193412) do
   create_table "regla_de_feriado_con_periodos", force: :cascade do |t|
     t.date "inicio"
     t.date "fin"
+    t.integer "calendario_de_feriado_id"
     t.integer "regla_id"
     t.string "regla_type"
     t.datetime "created_at", null: false
@@ -30,27 +31,21 @@ ActiveRecord::Schema.define(version: 20170523193412) do
   create_table "regla_de_feriado_de_dia_de_mes", force: :cascade do |t|
     t.integer "mes"
     t.integer "dia_de_mes"
+    t.integer "calendario_de_feriado_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "regla_de_feriado_de_dia_de_semanas", force: :cascade do |t|
     t.integer "dia_de_semana"
+    t.integer "calendario_de_feriado_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "regla_de_feriado_fechas", force: :cascade do |t|
     t.date "fecha"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "wrapper_de_regla_de_feriados", force: :cascade do |t|
-    t.integer "regla_id"
-    t.string "regla_type"
     t.integer "calendario_de_feriado_id"
-    t.string "calendario_de_feriado_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
